@@ -334,6 +334,10 @@ AK,Thoracic Surgery (Cardiothoracic Vascular Surgery),Education,6000.0
 AK,Thoracic Surgery (Cardiothoracic Vascular Surgery),Food & Beverage,2061.91
 AK,Thoracic Surgery (Cardiothoracic Vascular Surgery),Travel & Lodging,354.67
 AK,Transplant Surgery,Food & Beverage,21.1
+AK,Unknown,Device / Supply Loan,700.0
+AK,Unknown,Grant,1000.0
+AK,Unknown,Non-consulting professional services,179.34
+AK,Unknown,Other,10875.46
 AK,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,103.86
 AK,Urology,Education,363.09
 AK,Urology,Food & Beverage,5362.81
@@ -993,6 +997,14 @@ AL,Trauma Surgery,Food & Beverage,4905.74
 AL,Trauma Surgery,Other,106.95
 AL,Trauma Surgery,Travel & Lodging,1955.23
 AL,Undersea and Hyperbaric Medicine,Food & Beverage,51.7
+AL,Unknown,Consulting,40431.7
+AL,Unknown,Device / Supply Loan,298223.82
+AL,Unknown,Education,255535.0
+AL,Unknown,Food & Beverage,231.18
+AL,Unknown,Grant,1793785.69
+AL,Unknown,Non-consulting professional services,458811.27999999997
+AL,Unknown,Other,698191.83
+AL,Unknown,Royalty / License,98000.0
 AL,Urogynecology and Reconstructive Pelvic Surgery,Consulting,15912.779999999999
 AL,Urogynecology and Reconstructive Pelvic Surgery,Education,8374.7
 AL,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,7310.75
@@ -1580,6 +1592,14 @@ AR,Trauma Surgery,Food & Beverage,2476.06
 AR,Trauma Surgery,Other,34.34
 AR,Trauma Surgery,Travel & Lodging,2328.4
 AR,Undersea and Hyperbaric Medicine,Food & Beverage,357.46000000000004
+AR,Unknown,Consulting,7105.370000000001
+AR,Unknown,Device / Supply Loan,141604.69
+AR,Unknown,Education,55050.0
+AR,Unknown,Food & Beverage,600.02
+AR,Unknown,Grant,39089.0
+AR,Unknown,Non-consulting professional services,26498.989999999998
+AR,Unknown,Other,1343669.8599999999
+AR,Unknown,Travel & Lodging,10514.16
 AR,Urogynecology and Reconstructive Pelvic Surgery,Education,184.0
 AR,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,1307.51
 AR,Urogynecology and Reconstructive Pelvic Surgery,Honoraria,295.13
@@ -2451,6 +2471,13 @@ AZ,Trauma Surgery,Non-consulting professional services,25439.85
 AZ,Trauma Surgery,Other,16.25
 AZ,Trauma Surgery,Travel & Lodging,103886.78
 AZ,Undersea and Hyperbaric Medicine,Food & Beverage,85.16
+AZ,Unknown,Consulting,42076.25
+AZ,Unknown,Device / Supply Loan,349987.12
+AZ,Unknown,Education,73452.55
+AZ,Unknown,Food & Beverage,4100.0
+AZ,Unknown,Grant,1444923.83
+AZ,Unknown,Non-consulting professional services,254006.92
+AZ,Unknown,Other,1412249.68
 AZ,Urogynecology and Reconstructive Pelvic Surgery,Consulting,7764.8099999999995
 AZ,Urogynecology and Reconstructive Pelvic Surgery,Education,14597.72
 AZ,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,13051.99
@@ -3751,6 +3778,16 @@ CA,Trauma Surgery,Non-consulting professional services,23000.0
 CA,Trauma Surgery,Other,16.25
 CA,Trauma Surgery,Travel & Lodging,16869.89
 CA,Undersea and Hyperbaric Medicine,Food & Beverage,555.25
+CA,Unknown,Consulting,967587.9
+CA,Unknown,Device / Supply Loan,2030610.43
+CA,Unknown,Education,968679.81
+CA,Unknown,Food & Beverage,11357.75
+CA,Unknown,Grant,13967223.32
+CA,Unknown,Honoraria,3921.61
+CA,Unknown,Non-consulting professional services,4744888.73
+CA,Unknown,Other,7634158.53
+CA,Unknown,Royalty / License,8916338.82
+CA,Unknown,Travel & Lodging,4499.73
 CA,Urogynecology and Reconstructive Pelvic Surgery,Consulting,87823.39
 CA,Urogynecology and Reconstructive Pelvic Surgery,Education,46404.27
 CA,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,40884.62
@@ -4591,6 +4628,15 @@ CO,Trauma Surgery,Education,46798.69
 CO,Trauma Surgery,Food & Beverage,5430.36
 CO,Trauma Surgery,Other,77.33000000000001
 CO,Trauma Surgery,Travel & Lodging,5257.76
+CO,Unknown,Consulting,4134385.84
+CO,Unknown,Device / Supply Loan,376536.02
+CO,Unknown,Education,64922.4
+CO,Unknown,Food & Beverage,6024.32
+CO,Unknown,Grant,2572942.37
+CO,Unknown,Honoraria,53.69
+CO,Unknown,Non-consulting professional services,2258349.01
+CO,Unknown,Other,630770.63
+CO,Unknown,Royalty / License,139886.35
 CO,Urogynecology and Reconstructive Pelvic Surgery,Education,4000.0
 CO,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,2954.33
 CO,Urogynecology and Reconstructive Pelvic Surgery,Non-consulting professional services,2000.0
@@ -5313,6 +5359,13 @@ CT,Trauma Surgery,Education,18000.0
 CT,Trauma Surgery,Food & Beverage,961.61
 CT,Trauma Surgery,Travel & Lodging,49.28
 CT,Undersea and Hyperbaric Medicine,Food & Beverage,17.15
+CT,Unknown,Consulting,38994.06
+CT,Unknown,Device / Supply Loan,294519.13
+CT,Unknown,Education,101887.94
+CT,Unknown,Food & Beverage,916.0
+CT,Unknown,Grant,301697.0
+CT,Unknown,Non-consulting professional services,145740.02
+CT,Unknown,Other,880872.38
 CT,Urogynecology and Reconstructive Pelvic Surgery,Consulting,5875.0
 CT,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,1699.83
 CT,Urogynecology and Reconstructive Pelvic Surgery,Non-consulting professional services,1875.0
@@ -5871,6 +5924,14 @@ DC,Transplant Surgery,Non-consulting professional services,11944.38
 DC,Transplant Surgery,Travel & Lodging,4681.8099999999995
 DC,Trauma Surgery,Consulting,7500.0
 DC,Trauma Surgery,Food & Beverage,213.37
+DC,Unknown,Consulting,85033.19
+DC,Unknown,Device / Supply Loan,311767.39
+DC,Unknown,Education,624993.53
+DC,Unknown,Food & Beverage,1022.4300000000001
+DC,Unknown,Grant,1800700.0
+DC,Unknown,Non-consulting professional services,56945.0
+DC,Unknown,Other,1440758.87
+DC,Unknown,Royalty / License,330.36
 DC,Urogynecology and Reconstructive Pelvic Surgery,Education,1000.0
 DC,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,6770.84
 DC,Urogynecology and Reconstructive Pelvic Surgery,Non-consulting professional services,1500.0
@@ -6270,6 +6331,13 @@ DE,Thoracic Surgery (Cardiothoracic Vascular Surgery),Non-consulting professiona
 DE,Thoracic Surgery (Cardiothoracic Vascular Surgery),Other,236.75
 DE,Thoracic Surgery (Cardiothoracic Vascular Surgery),Travel & Lodging,3175.7599999999998
 DE,Transplant Surgery,Other,450.0
+DE,Unknown,Consulting,2000.0
+DE,Unknown,Device / Supply Loan,196521.38
+DE,Unknown,Education,1443.85
+DE,Unknown,Food & Beverage,750.0
+DE,Unknown,Grant,33000.0
+DE,Unknown,Non-consulting professional services,48306.21
+DE,Unknown,Other,188791.37
 DE,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,2092.46
 DE,Urology,Consulting,1285.0
 DE,Urology,Education,565.03
@@ -7409,6 +7477,16 @@ FL,Trauma Surgery,Travel & Lodging,18574.4
 FL,Undersea and Hyperbaric Medicine,Consulting,550.0
 FL,Undersea and Hyperbaric Medicine,Food & Beverage,6944.32
 FL,Undersea and Hyperbaric Medicine,Non-consulting professional services,96.3
+FL,Unknown,Consulting,283046.83999999997
+FL,Unknown,Device / Supply Loan,1550465.43
+FL,Unknown,Education,670813.37
+FL,Unknown,Food & Beverage,5255.18
+FL,Unknown,Grant,4652522.13
+FL,Unknown,Honoraria,229.6
+FL,Unknown,Non-consulting professional services,560051.91
+FL,Unknown,Other,3098463.11
+FL,Unknown,Royalty / License,245779.37
+FL,Unknown,Travel & Lodging,1738.29
 FL,Urogynecology and Reconstructive Pelvic Surgery,Consulting,39681.0
 FL,Urogynecology and Reconstructive Pelvic Surgery,Education,15162.32
 FL,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,33737.74
@@ -8325,6 +8403,14 @@ GA,Trauma Surgery,Non-consulting professional services,1000.0
 GA,Trauma Surgery,Travel & Lodging,3370.89
 GA,Undersea and Hyperbaric Medicine,Education,102.57
 GA,Undersea and Hyperbaric Medicine,Food & Beverage,1672.04
+GA,Unknown,Consulting,46009.29
+GA,Unknown,Device / Supply Loan,291583.32
+GA,Unknown,Education,733704.0
+GA,Unknown,Food & Beverage,3113.58
+GA,Unknown,Grant,3691981.39
+GA,Unknown,Non-consulting professional services,358061.48
+GA,Unknown,Other,1148196.54
+GA,Unknown,Royalty / License,1566695.8900000001
 GA,Urogynecology and Reconstructive Pelvic Surgery,Consulting,11167.72
 GA,Urogynecology and Reconstructive Pelvic Surgery,Education,49259.98
 GA,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,18854.51
@@ -8789,6 +8875,13 @@ HI,Transplant Surgery,Food & Beverage,780.46
 HI,Transplant Surgery,Non-consulting professional services,11000.0
 HI,Transplant Surgery,Travel & Lodging,136.68
 HI,Trauma Surgery,Food & Beverage,451.66
+HI,Unknown,Consulting,5145.92
+HI,Unknown,Device / Supply Loan,44057.54
+HI,Unknown,Food & Beverage,621.9300000000001
+HI,Unknown,Grant,20700.0
+HI,Unknown,Non-consulting professional services,16270.0
+HI,Unknown,Other,17413.53
+HI,Unknown,Travel & Lodging,14708.0
 HI,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,2007.8799999999999
 HI,Urogynecology and Reconstructive Pelvic Surgery,Travel & Lodging,3168.05
 HI,Urology,Consulting,2625.0
@@ -9338,6 +9431,14 @@ IA,Transplant Surgery,Travel & Lodging,998.85
 IA,Trauma Surgery,Food & Beverage,86.88
 IA,Undersea and Hyperbaric Medicine,Consulting,687.5
 IA,Undersea and Hyperbaric Medicine,Food & Beverage,221.04
+IA,Unknown,Consulting,625134.38
+IA,Unknown,Device / Supply Loan,161456.03
+IA,Unknown,Education,32525.0
+IA,Unknown,Food & Beverage,15.69
+IA,Unknown,Grant,1116250.73
+IA,Unknown,Non-consulting professional services,72344.28
+IA,Unknown,Other,416513.93
+IA,Unknown,Royalty / License,22560.65
 IA,Urogynecology and Reconstructive Pelvic Surgery,Education,99.0
 IA,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,1852.6200000000001
 IA,Urogynecology and Reconstructive Pelvic Surgery,Travel & Lodging,891.53
@@ -9779,6 +9880,12 @@ ID,Thoracic Surgery (Cardiothoracic Vascular Surgery),Other,16.25
 ID,Thoracic Surgery (Cardiothoracic Vascular Surgery),Travel & Lodging,18507.07
 ID,Trauma Surgery,Food & Beverage,21.73
 ID,Undersea and Hyperbaric Medicine,Food & Beverage,1338.68
+ID,Unknown,Consulting,1800.0
+ID,Unknown,Device / Supply Loan,18714.08
+ID,Unknown,Education,75.4
+ID,Unknown,Grant,24427.0
+ID,Unknown,Non-consulting professional services,15046.0
+ID,Unknown,Other,36075.42
 ID,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,782.47
 ID,Urology,Consulting,1860.0
 ID,Urology,Education,696.99
@@ -10761,6 +10868,15 @@ IL,Trauma Surgery,Non-consulting professional services,45.0
 IL,Trauma Surgery,Other,50.59
 IL,Trauma Surgery,Travel & Lodging,6480.76
 IL,Undersea and Hyperbaric Medicine,Food & Beverage,628.0400000000001
+IL,Unknown,Consulting,679502.53
+IL,Unknown,Device / Supply Loan,1697728.0
+IL,Unknown,Education,668269.84
+IL,Unknown,Food & Beverage,1509.41
+IL,Unknown,Grant,7932587.65
+IL,Unknown,Honoraria,15500.0
+IL,Unknown,Non-consulting professional services,682520.02
+IL,Unknown,Other,2788814.25
+IL,Unknown,Royalty / License,70540.94
 IL,Urogynecology and Reconstructive Pelvic Surgery,Consulting,105525.24
 IL,Urogynecology and Reconstructive Pelvic Surgery,Education,199.99
 IL,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,13907.380000000001
@@ -11507,6 +11623,13 @@ IN,Trauma Surgery,Education,8731.32
 IN,Trauma Surgery,Food & Beverage,658.43
 IN,Trauma Surgery,Travel & Lodging,2013.92
 IN,Undersea and Hyperbaric Medicine,Food & Beverage,580.02
+IN,Unknown,Consulting,9436.53
+IN,Unknown,Device / Supply Loan,90714.98
+IN,Unknown,Education,34219.54
+IN,Unknown,Food & Beverage,29.5
+IN,Unknown,Grant,677283.0
+IN,Unknown,Non-consulting professional services,232404.8
+IN,Unknown,Other,357360.64
 IN,Urogynecology and Reconstructive Pelvic Surgery,Consulting,730.0
 IN,Urogynecology and Reconstructive Pelvic Surgery,Education,100.0
 IN,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,9486.04
@@ -12086,6 +12209,13 @@ KS,Transplant Surgery,Food & Beverage,60.620000000000005
 KS,Trauma Surgery,Food & Beverage,168.07
 KS,Undersea and Hyperbaric Medicine,Consulting,10037.5
 KS,Undersea and Hyperbaric Medicine,Food & Beverage,3107.8
+KS,Unknown,Consulting,2163.05
+KS,Unknown,Device / Supply Loan,290393.82
+KS,Unknown,Education,250.0
+KS,Unknown,Grant,3300.0
+KS,Unknown,Non-consulting professional services,257284.45
+KS,Unknown,Other,182935.18
+KS,Unknown,Royalty / License,57615.71
 KS,Urogynecology and Reconstructive Pelvic Surgery,Consulting,21375.0
 KS,Urogynecology and Reconstructive Pelvic Surgery,Education,139.98
 KS,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,2494.01
@@ -12760,6 +12890,13 @@ KY,Trauma Surgery,Education,8500.0
 KY,Trauma Surgery,Food & Beverage,1568.09
 KY,Trauma Surgery,Travel & Lodging,5763.82
 KY,Undersea and Hyperbaric Medicine,Food & Beverage,378.87
+KY,Unknown,Consulting,6716.12
+KY,Unknown,Device / Supply Loan,157984.84
+KY,Unknown,Education,29059.71
+KY,Unknown,Food & Beverage,546.78
+KY,Unknown,Grant,334092.6
+KY,Unknown,Non-consulting professional services,48881.74
+KY,Unknown,Other,178616.31
 KY,Urogynecology and Reconstructive Pelvic Surgery,Education,169.98
 KY,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,3689.71
 KY,Urogynecology and Reconstructive Pelvic Surgery,Non-consulting professional services,5150.0
@@ -13489,6 +13626,13 @@ LA,Trauma Surgery,Other,5000.0
 LA,Trauma Surgery,Travel & Lodging,7224.65
 LA,Undersea and Hyperbaric Medicine,Food & Beverage,1288.5
 LA,Undersea and Hyperbaric Medicine,Non-consulting professional services,3250.0
+LA,Unknown,Consulting,10918.75
+LA,Unknown,Device / Supply Loan,428888.48
+LA,Unknown,Education,78292.76
+LA,Unknown,Food & Beverage,1103.29
+LA,Unknown,Grant,2044906.37
+LA,Unknown,Non-consulting professional services,76485.0
+LA,Unknown,Other,824797.2
 LA,Urogynecology and Reconstructive Pelvic Surgery,Consulting,3550.0
 LA,Urogynecology and Reconstructive Pelvic Surgery,Education,1000.0
 LA,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,5035.78
@@ -14416,6 +14560,15 @@ MA,Trauma Surgery,Education,10750.0
 MA,Trauma Surgery,Food & Beverage,2711.14
 MA,Trauma Surgery,Other,34.34
 MA,Trauma Surgery,Travel & Lodging,3393.33
+MA,Unknown,Consulting,1849768.59
+MA,Unknown,Device / Supply Loan,923787.62
+MA,Unknown,Education,1003864.57
+MA,Unknown,Food & Beverage,3612.28
+MA,Unknown,Grant,6455137.81
+MA,Unknown,Non-consulting professional services,7582606.7
+MA,Unknown,Other,4961762.83
+MA,Unknown,Royalty / License,128559333.67999999
+MA,Unknown,Travel & Lodging,9223.48
 MA,Urogynecology and Reconstructive Pelvic Surgery,Acquisitions,5430.389999999999
 MA,Urogynecology and Reconstructive Pelvic Surgery,Consulting,27550.75
 MA,Urogynecology and Reconstructive Pelvic Surgery,Education,398.34
@@ -15252,6 +15405,15 @@ MD,Trauma Surgery,Honoraria,44550.0
 MD,Trauma Surgery,Non-consulting professional services,21525.05
 MD,Trauma Surgery,Travel & Lodging,3493.0299999999997
 MD,Undersea and Hyperbaric Medicine,Food & Beverage,243.19
+MD,Unknown,Consulting,35811.0
+MD,Unknown,Device / Supply Loan,202447.53
+MD,Unknown,Education,109634.93
+MD,Unknown,Food & Beverage,219.26
+MD,Unknown,Grant,784598.4400000001
+MD,Unknown,Non-consulting professional services,61155.0
+MD,Unknown,Other,297790.43
+MD,Unknown,Royalty / License,53720.2
+MD,Unknown,Travel & Lodging,4766.36
 MD,Urogynecology and Reconstructive Pelvic Surgery,Consulting,43045.020000000004
 MD,Urogynecology and Reconstructive Pelvic Surgery,Education,4398.93
 MD,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,10113.539999999999
@@ -15640,6 +15802,12 @@ ME,Thoracic Surgery (Cardiothoracic Vascular Surgery),Travel & Lodging,8098.94
 ME,Trauma Surgery,Education,40.0
 ME,Trauma Surgery,Food & Beverage,198.18
 ME,Undersea and Hyperbaric Medicine,Food & Beverage,447.13
+ME,Unknown,Consulting,96.24
+ME,Unknown,Device / Supply Loan,38218.729999999996
+ME,Unknown,Education,48.0
+ME,Unknown,Food & Beverage,79.54
+ME,Unknown,Other,154099.31
+ME,Unknown,Royalty / License,2626.9
 ME,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,269.57
 ME,Urology,Consulting,22345.0
 ME,Urology,Education,968.9499999999999
@@ -16497,6 +16665,16 @@ MI,Trauma Surgery,Food & Beverage,3113.66
 MI,Trauma Surgery,Other,16.25
 MI,Trauma Surgery,Travel & Lodging,38.0
 MI,Undersea and Hyperbaric Medicine,Food & Beverage,775.44
+MI,Unknown,Consulting,325624.22
+MI,Unknown,Device / Supply Loan,316486.69
+MI,Unknown,Education,470114.56
+MI,Unknown,Food & Beverage,2119.59
+MI,Unknown,Grant,4319892.3100000005
+MI,Unknown,Honoraria,5000.0
+MI,Unknown,Non-consulting professional services,3464939.52
+MI,Unknown,Other,2084187.07
+MI,Unknown,Royalty / License,17677485.29
+MI,Unknown,Travel & Lodging,509.07
 MI,Urogynecology and Reconstructive Pelvic Surgery,Education,194.0
 MI,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,6113.0
 MI,Urogynecology and Reconstructive Pelvic Surgery,Honoraria,24241.16
@@ -17206,6 +17384,14 @@ MN,Trauma Surgery,Education,20.0
 MN,Trauma Surgery,Food & Beverage,1159.46
 MN,Trauma Surgery,Travel & Lodging,505.15
 MN,Undersea and Hyperbaric Medicine,Food & Beverage,17.6
+MN,Unknown,Consulting,35398.35
+MN,Unknown,Device / Supply Loan,946134.5599999999
+MN,Unknown,Education,54032.33
+MN,Unknown,Food & Beverage,24.0
+MN,Unknown,Grant,1280949.39
+MN,Unknown,Non-consulting professional services,587768.0
+MN,Unknown,Other,233329.96
+MN,Unknown,Royalty / License,21049.88
 MN,Urogynecology and Reconstructive Pelvic Surgery,Consulting,13749.029999999999
 MN,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,6266.06
 MN,Urogynecology and Reconstructive Pelvic Surgery,Non-consulting professional services,1000.0
@@ -18077,6 +18263,15 @@ MO,Trauma Surgery,Education,40.0
 MO,Trauma Surgery,Food & Beverage,4339.74
 MO,Trauma Surgery,Travel & Lodging,2114.62
 MO,Undersea and Hyperbaric Medicine,Food & Beverage,3491.83
+MO,Unknown,Consulting,255524.91
+MO,Unknown,Device / Supply Loan,398664.51
+MO,Unknown,Education,29040.5
+MO,Unknown,Food & Beverage,1153.2
+MO,Unknown,Grant,334399.39
+MO,Unknown,Non-consulting professional services,8801572.53
+MO,Unknown,Other,389534.06
+MO,Unknown,Royalty / License,93828.12
+MO,Unknown,Travel & Lodging,348.28
 MO,Urogynecology and Reconstructive Pelvic Surgery,Education,50.0
 MO,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,4693.41
 MO,Urogynecology and Reconstructive Pelvic Surgery,Honoraria,150.0
@@ -18616,6 +18811,14 @@ MS,Thoracic Surgery (Cardiothoracic Vascular Surgery),Travel & Lodging,15973.52
 MS,Transplant Surgery,Food & Beverage,418.46
 MS,Trauma Surgery,Food & Beverage,313.48
 MS,Undersea and Hyperbaric Medicine,Food & Beverage,149.79
+MS,Unknown,Consulting,3897.9
+MS,Unknown,Device / Supply Loan,145301.69
+MS,Unknown,Education,34298.85
+MS,Unknown,Food & Beverage,40.260000000000005
+MS,Unknown,Grant,212478.75
+MS,Unknown,Non-consulting professional services,23834.38
+MS,Unknown,Other,210436.88
+MS,Unknown,Royalty / License,9991.38
 MS,Urogynecology and Reconstructive Pelvic Surgery,Consulting,100.0
 MS,Urogynecology and Reconstructive Pelvic Surgery,Education,1000.0
 MS,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,2126.09
@@ -18957,6 +19160,12 @@ MT,Thoracic Surgery (Cardiothoracic Vascular Surgery),Food & Beverage,4853.1
 MT,Thoracic Surgery (Cardiothoracic Vascular Surgery),Royalty / License,89912.11
 MT,Trauma Surgery,Food & Beverage,43.06
 MT,Undersea and Hyperbaric Medicine,Food & Beverage,127.89
+MT,Unknown,Consulting,1773.33
+MT,Unknown,Device / Supply Loan,39113.95
+MT,Unknown,Education,8798.0
+MT,Unknown,Grant,8550.0
+MT,Unknown,Non-consulting professional services,40330.49
+MT,Unknown,Other,204429.94999999998
 MT,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,67.88000000000001
 MT,Urology,Consulting,400.0
 MT,Urology,Education,4020.25
@@ -19818,6 +20027,14 @@ NC,Trauma Surgery,Consulting,50779.97
 NC,Trauma Surgery,Education,60.0
 NC,Trauma Surgery,Food & Beverage,1231.76
 NC,Undersea and Hyperbaric Medicine,Food & Beverage,348.83
+NC,Unknown,Consulting,1985057.42
+NC,Unknown,Device / Supply Loan,708461.13
+NC,Unknown,Education,127626.19
+NC,Unknown,Food & Beverage,174.6
+NC,Unknown,Grant,1262711.99
+NC,Unknown,Non-consulting professional services,583335.85
+NC,Unknown,Other,872900.62
+NC,Unknown,Royalty / License,3314230.84
 NC,Urogynecology and Reconstructive Pelvic Surgery,Consulting,15419.15
 NC,Urogynecology and Reconstructive Pelvic Surgery,Education,4000.0
 NC,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,13535.49
@@ -20125,6 +20342,12 @@ ND,Transplant Surgery,Education,37.85
 ND,Transplant Surgery,Food & Beverage,400.43
 ND,Transplant Surgery,Travel & Lodging,3143.73
 ND,Trauma Surgery,Food & Beverage,480.1
+ND,Unknown,Consulting,1500.0
+ND,Unknown,Device / Supply Loan,17016.96
+ND,Unknown,Education,12009.62
+ND,Unknown,Grant,2200.0
+ND,Unknown,Non-consulting professional services,6254.66
+ND,Unknown,Other,72410.61
 ND,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,108.41999999999999
 ND,Urology,Consulting,40.0
 ND,Urology,Education,99.99
@@ -20598,6 +20821,13 @@ NE,Transplant Surgery,Non-consulting professional services,2700.0
 NE,Transplant Surgery,Travel & Lodging,6654.45
 NE,Trauma Surgery,Education,3000.0
 NE,Trauma Surgery,Food & Beverage,970.26
+NE,Unknown,Consulting,2336.0
+NE,Unknown,Device / Supply Loan,126372.4
+NE,Unknown,Food & Beverage,776.78
+NE,Unknown,Grant,215330.16
+NE,Unknown,Non-consulting professional services,147799.0
+NE,Unknown,Other,240517.03999999998
+NE,Unknown,Travel & Lodging,22608.329999999998
 NE,Urogynecology and Reconstructive Pelvic Surgery,Consulting,5802.75
 NE,Urogynecology and Reconstructive Pelvic Surgery,Education,99.99
 NE,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,2023.72
@@ -20989,6 +21219,12 @@ NH,Thoracic Surgery (Cardiothoracic Vascular Surgery),Travel & Lodging,8924.0
 NH,Transplant Surgery,Food & Beverage,16.95
 NH,Trauma Surgery,Device / Supply Loan,429.0
 NH,Undersea and Hyperbaric Medicine,Food & Beverage,85.82
+NH,Unknown,Consulting,3750.0
+NH,Unknown,Device / Supply Loan,30131.68
+NH,Unknown,Education,22548.0
+NH,Unknown,Grant,45250.0
+NH,Unknown,Non-consulting professional services,958349.3500000001
+NH,Unknown,Other,68644.82
 NH,Urogynecology and Reconstructive Pelvic Surgery,Education,104.77
 NH,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,458.67
 NH,Urology,Consulting,14280.0
@@ -21856,6 +22092,15 @@ NJ,Transplantation,Food & Beverage,106.82
 NJ,Trauma Surgery,Education,13500.0
 NJ,Trauma Surgery,Food & Beverage,5014.24
 NJ,Trauma Surgery,Travel & Lodging,5753.91
+NJ,Unknown,Consulting,45040.0
+NJ,Unknown,Device / Supply Loan,521143.57
+NJ,Unknown,Education,150349.37
+NJ,Unknown,Food & Beverage,2455.0
+NJ,Unknown,Grant,1763109.3
+NJ,Unknown,Non-consulting professional services,640996.25
+NJ,Unknown,Other,594047.04
+NJ,Unknown,Royalty / License,1174836.5
+NJ,Unknown,Travel & Lodging,6250.0
 NJ,Urogynecology and Reconstructive Pelvic Surgery,Consulting,18680.510000000002
 NJ,Urogynecology and Reconstructive Pelvic Surgery,Education,1737.4499999999998
 NJ,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,11417.61
@@ -22336,6 +22581,13 @@ NM,Trauma Surgery,Education,1500.0
 NM,Trauma Surgery,Food & Beverage,96.33
 NM,Trauma Surgery,Travel & Lodging,1276.19
 NM,Undersea and Hyperbaric Medicine,Food & Beverage,423.07
+NM,Unknown,Consulting,3428.83
+NM,Unknown,Device / Supply Loan,113462.53
+NM,Unknown,Education,8191.790000000001
+NM,Unknown,Food & Beverage,142.78
+NM,Unknown,Grant,44465.0
+NM,Unknown,Non-consulting professional services,27610.05
+NM,Unknown,Other,101392.78
 NM,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,2155.65
 NM,Urology,Consulting,6550.0
 NM,Urology,Education,174.72
@@ -22957,6 +23209,12 @@ NV,Transplant Surgery,Consulting,220.0
 NV,Transplant Surgery,Food & Beverage,270.71
 NV,Trauma Surgery,Food & Beverage,1081.49
 NV,Undersea and Hyperbaric Medicine,Food & Beverage,1299.57
+NV,Unknown,Consulting,2876.49
+NV,Unknown,Device / Supply Loan,340598.69
+NV,Unknown,Education,38993.16
+NV,Unknown,Grant,1500.0
+NV,Unknown,Non-consulting professional services,57381.47
+NV,Unknown,Other,231781.69
 NV,Urogynecology and Reconstructive Pelvic Surgery,Education,269.0
 NV,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,2456.46
 NV,Urogynecology and Reconstructive Pelvic Surgery,Other,171.42000000000002
@@ -24096,6 +24354,15 @@ NY,Undersea and Hyperbaric Medicine,Food & Beverage,2435.13
 NY,Undersea and Hyperbaric Medicine,Non-consulting professional services,10500.0
 NY,Undersea and Hyperbaric Medicine,Other,1500.0
 NY,Undersea and Hyperbaric Medicine,Travel & Lodging,1871.31
+NY,Unknown,Consulting,93286.72
+NY,Unknown,Device / Supply Loan,2080150.76
+NY,Unknown,Education,535110.54
+NY,Unknown,Food & Beverage,7228.71
+NY,Unknown,Grant,7933460.75
+NY,Unknown,Non-consulting professional services,814817.1900000001
+NY,Unknown,Other,3291928.85
+NY,Unknown,Royalty / License,1371578.51
+NY,Unknown,Travel & Lodging,605.7
 NY,Urogynecology and Reconstructive Pelvic Surgery,Acquisitions,5430.389999999999
 NY,Urogynecology and Reconstructive Pelvic Surgery,Consulting,5800.0
 NY,Urogynecology and Reconstructive Pelvic Surgery,Education,9679.69
@@ -25108,6 +25375,16 @@ OH,Trauma Surgery,Other,1700.0
 OH,Trauma Surgery,Travel & Lodging,11834.82
 OH,Undersea and Hyperbaric Medicine,Device / Supply Loan,30.0
 OH,Undersea and Hyperbaric Medicine,Food & Beverage,164.88
+OH,Unknown,Consulting,1614291.52
+OH,Unknown,Device / Supply Loan,1279757.17
+OH,Unknown,Education,806711.74
+OH,Unknown,Food & Beverage,6931.1
+OH,Unknown,Grant,3593087.63
+OH,Unknown,Honoraria,5000.0
+OH,Unknown,Non-consulting professional services,1339006.26
+OH,Unknown,Other,2583176.39
+OH,Unknown,Royalty / License,20499976.61
+OH,Unknown,Travel & Lodging,9288.55
 OH,Urogynecology and Reconstructive Pelvic Surgery,Consulting,147300.92
 OH,Urogynecology and Reconstructive Pelvic Surgery,Education,904.3499999999999
 OH,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,26898.63
@@ -25718,6 +25995,12 @@ OK,Transplant Surgery,Travel & Lodging,878.0
 OK,Trauma Surgery,Education,3000.0
 OK,Trauma Surgery,Food & Beverage,502.08
 OK,Undersea and Hyperbaric Medicine,Food & Beverage,1585.22
+OK,Unknown,Device / Supply Loan,155528.64
+OK,Unknown,Education,22300.0
+OK,Unknown,Food & Beverage,186.24
+OK,Unknown,Grant,1000.0
+OK,Unknown,Non-consulting professional services,46748.32
+OK,Unknown,Other,58762.04
 OK,Urogynecology and Reconstructive Pelvic Surgery,Education,74.99
 OK,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,7541.85
 OK,Urogynecology and Reconstructive Pelvic Surgery,Honoraria,150.0
@@ -26338,6 +26621,15 @@ OR,Transplant Surgery,Travel & Lodging,5485.81
 OR,Trauma Surgery,Consulting,750.0
 OR,Trauma Surgery,Food & Beverage,1532.94
 OR,Trauma Surgery,Royalty / License,17152.37
+OR,Unknown,Consulting,30398.0
+OR,Unknown,Device / Supply Loan,48628.6
+OR,Unknown,Education,18037.1
+OR,Unknown,Food & Beverage,2679.84
+OR,Unknown,Grant,1144222.56
+OR,Unknown,Non-consulting professional services,669912.6900000001
+OR,Unknown,Other,229042.07
+OR,Unknown,Royalty / License,232819.74
+OR,Unknown,Travel & Lodging,2858.57
 OR,Urogynecology and Reconstructive Pelvic Surgery,Consulting,6250.0
 OR,Urogynecology and Reconstructive Pelvic Surgery,Education,64.95
 OR,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,3281.59
@@ -27338,6 +27630,15 @@ PA,Trauma Surgery,Honoraria,4632.5
 PA,Trauma Surgery,Other,66.84
 PA,Trauma Surgery,Travel & Lodging,11826.97
 PA,Undersea and Hyperbaric Medicine,Food & Beverage,1001.21
+PA,Unknown,Consulting,1144802.96
+PA,Unknown,Device / Supply Loan,1135861.06
+PA,Unknown,Education,761560.89
+PA,Unknown,Food & Beverage,17555.25
+PA,Unknown,Grant,5032180.97
+PA,Unknown,Honoraria,9.22
+PA,Unknown,Non-consulting professional services,1495617.49
+PA,Unknown,Other,1883806.95
+PA,Unknown,Royalty / License,371839642.18
 PA,Urogynecology and Reconstructive Pelvic Surgery,Consulting,29827.5
 PA,Urogynecology and Reconstructive Pelvic Surgery,Education,14269.97
 PA,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,16293.74
@@ -27786,6 +28087,11 @@ PR,Thoracic Surgery (Cardiothoracic Vascular Surgery),Non-consulting professiona
 PR,Thoracic Surgery (Cardiothoracic Vascular Surgery),Travel & Lodging,4499.96
 PR,Transplant Hepatology,Food & Beverage,19.26
 PR,Transplant Surgery,Food & Beverage,132.54
+PR,Unknown,Consulting,4000.0
+PR,Unknown,Device / Supply Loan,752.72
+PR,Unknown,Grant,40500.0
+PR,Unknown,Non-consulting professional services,9000.0
+PR,Unknown,Other,35510.42
 PR,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,895.7
 PR,Urology,Consulting,92000.0
 PR,Urology,Education,42826.91
@@ -28209,6 +28515,13 @@ RI,Trauma Surgery,Education,14500.0
 RI,Trauma Surgery,Food & Beverage,102.09
 RI,Trauma Surgery,Travel & Lodging,1360.32
 RI,Undersea and Hyperbaric Medicine,Food & Beverage,230.22
+RI,Unknown,Consulting,13390.0
+RI,Unknown,Device / Supply Loan,20191.65
+RI,Unknown,Education,40.0
+RI,Unknown,Grant,66714.96
+RI,Unknown,Non-consulting professional services,14792.12
+RI,Unknown,Other,36632.53
+RI,Unknown,Royalty / License,171.94
 RI,Urogynecology and Reconstructive Pelvic Surgery,Consulting,4500.0
 RI,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,337.6
 RI,Urogynecology and Reconstructive Pelvic Surgery,Non-consulting professional services,6975.0
@@ -28916,6 +29229,16 @@ SC,Trauma Surgery,Non-consulting professional services,30500.0
 SC,Trauma Surgery,Travel & Lodging,2836.03
 SC,Undersea and Hyperbaric Medicine,Food & Beverage,424.23
 SC,Undersea and Hyperbaric Medicine,Other,1800.0
+SC,Unknown,Consulting,24545.83
+SC,Unknown,Device / Supply Loan,398358.7
+SC,Unknown,Education,21650.0
+SC,Unknown,Entertainment,1916.16
+SC,Unknown,Food & Beverage,7746.68
+SC,Unknown,Grant,928802.6399999999
+SC,Unknown,Honoraria,44.47
+SC,Unknown,Non-consulting professional services,216906.35
+SC,Unknown,Other,189027.27
+SC,Unknown,Travel & Lodging,1930.67
 SC,Urogynecology and Reconstructive Pelvic Surgery,Consulting,15934.9
 SC,Urogynecology and Reconstructive Pelvic Surgery,Education,289.96
 SC,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,6870.55
@@ -29294,6 +29617,13 @@ SD,Transplant Surgery,Travel & Lodging,2101.86
 SD,Trauma Surgery,Education,10750.0
 SD,Trauma Surgery,Food & Beverage,377.99
 SD,Trauma Surgery,Travel & Lodging,2423.7
+SD,Unknown,Consulting,860.0
+SD,Unknown,Device / Supply Loan,17034.33
+SD,Unknown,Education,77780.0
+SD,Unknown,Food & Beverage,459.62
+SD,Unknown,Grant,3000.0
+SD,Unknown,Non-consulting professional services,44550.0
+SD,Unknown,Other,53271.83
 SD,Urogynecology and Reconstructive Pelvic Surgery,Consulting,16387.52
 SD,Urogynecology and Reconstructive Pelvic Surgery,Education,79.99
 SD,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,3028.87
@@ -30103,6 +30433,15 @@ TN,Trauma Surgery,Non-consulting professional services,3000.0
 TN,Trauma Surgery,Other,3000.0
 TN,Trauma Surgery,Travel & Lodging,14597.82
 TN,Undersea and Hyperbaric Medicine,Food & Beverage,25.19
+TN,Unknown,Consulting,14342.95
+TN,Unknown,Device / Supply Loan,250933.4
+TN,Unknown,Education,200217.81
+TN,Unknown,Food & Beverage,2051.68
+TN,Unknown,Grant,2830238.11
+TN,Unknown,Non-consulting professional services,281311.48
+TN,Unknown,Other,989844.05
+TN,Unknown,Royalty / License,190859.88999999998
+TN,Unknown,Travel & Lodging,1245.8600000000001
 TN,Urogynecology and Reconstructive Pelvic Surgery,Consulting,10218.0
 TN,Urogynecology and Reconstructive Pelvic Surgery,Education,14013.58
 TN,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,13048.0
@@ -31283,6 +31622,16 @@ TX,Undersea and Hyperbaric Medicine,Food & Beverage,14430.68
 TX,Undersea and Hyperbaric Medicine,Non-consulting professional services,13050.0
 TX,Undersea and Hyperbaric Medicine,Royalty / License,379458.2
 TX,Undersea and Hyperbaric Medicine,Travel & Lodging,2165.06
+TX,Unknown,Consulting,1515689.51
+TX,Unknown,Device / Supply Loan,2655374.03
+TX,Unknown,Education,229022.57
+TX,Unknown,Food & Beverage,62002.99
+TX,Unknown,Grant,1619648.9
+TX,Unknown,Honoraria,2320.38
+TX,Unknown,Non-consulting professional services,1308064.97
+TX,Unknown,Other,3303614.68
+TX,Unknown,Royalty / License,5589629.470000001
+TX,Unknown,Travel & Lodging,29656.61
 TX,Urogynecology and Reconstructive Pelvic Surgery,Consulting,18180.0
 TX,Urogynecology and Reconstructive Pelvic Surgery,Education,2727.44
 TX,Urogynecology and Reconstructive Pelvic Surgery,Entertainment,241.93
@@ -31945,6 +32294,14 @@ UT,Trauma Surgery,Food & Beverage,322.54
 UT,Trauma Surgery,Non-consulting professional services,2500.0
 UT,Trauma Surgery,Travel & Lodging,2373.5699999999997
 UT,Undersea and Hyperbaric Medicine,Food & Beverage,647.09
+UT,Unknown,Consulting,233107.55
+UT,Unknown,Device / Supply Loan,113161.25
+UT,Unknown,Education,70712.0
+UT,Unknown,Food & Beverage,70.0
+UT,Unknown,Grant,1422905.33
+UT,Unknown,Non-consulting professional services,370379.19
+UT,Unknown,Other,475377.24
+UT,Unknown,Royalty / License,227490.0
 UT,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,461.26
 UT,Urology,Consulting,15975.0
 UT,Urology,Education,37908.63
@@ -31970,6 +32327,101 @@ UT,Women's Health,Consulting,30.0
 UT,Women's Health,Education,184.98
 UT,Women's Health,Food & Beverage,3777.07
 UT,Women's Health,Travel & Lodging,2204.2
+Unknown,Addiction Psychiatry,Food & Beverage,168.05
+Unknown,Adult Health,Food & Beverage,20.98
+Unknown,Adult Reconstructive Orthopaedic Surgery,Consulting,11500.0
+Unknown,Adult Reconstructive Orthopaedic Surgery,Food & Beverage,305.12
+Unknown,Allergy & Immunology,Food & Beverage,16.68
+Unknown,Anatomic Pathology,Food & Beverage,220.8
+Unknown,Anatomic Pathology & Clinical Pathology,Food & Beverage,87.46
+Unknown,Anesthesiology,Food & Beverage,21.18
+Unknown,Cardiovascular Disease,Food & Beverage,18.36
+Unknown,Child & Adolescent Psychiatry,Consulting,5296.15
+Unknown,Child & Adolescent Psychiatry,Food & Beverage,17.44
+Unknown,Child & Adolescent Psychiatry,Honoraria,1354.38
+Unknown,Child & Adolescent Psychiatry,Travel & Lodging,1329.23
+Unknown,Clinical Neurophysiology,Food & Beverage,282.58000000000004
+Unknown,Clinical Nurse Specialist,Food & Beverage,23.47
+Unknown,Corneal and Contact Management,Consulting,119517.26000000001
+Unknown,Corneal and Contact Management,Food & Beverage,240.99
+Unknown,Corneal and Contact Management,Non-consulting professional services,294530.95
+Unknown,Dentist,Education,50.0
+Unknown,Dentist,Food & Beverage,1393.18
+Unknown,Dentist,Honoraria,105.85999999999999
+Unknown,Dentist,Travel & Lodging,1422.8400000000001
+Unknown,Dermatopathology,Food & Beverage,14.41
+Unknown,Diagnostic Radiology,Consulting,129797.68
+Unknown,Diagnostic Radiology,Food & Beverage,46.95
+Unknown,Emergency Medicine,Food & Beverage,665.16
+Unknown,"Endocrinology, Diabetes & Metabolism",Food & Beverage,124.56
+Unknown,Endodontics,Education,70.17999999999999
+Unknown,Family,Food & Beverage,456.01
+Unknown,Family Health,Food & Beverage,19.5
+Unknown,Family Medicine,Food & Beverage,232.53
+Unknown,Foot & Ankle Surgery,Food & Beverage,189.29999999999998
+Unknown,Gastroenterology,Food & Beverage,577.63
+Unknown,General Practice,Consulting,11070.0
+Unknown,General Practice,Education,369.69
+Unknown,General Practice,Food & Beverage,3524.08
+Unknown,General Practice,Travel & Lodging,1524.0900000000001
+Unknown,Hematology,Food & Beverage,32.27
+Unknown,Hematology & Oncology,Food & Beverage,384.93
+Unknown,Hospitalist,Food & Beverage,22.93
+Unknown,Infectious Disease,Non-consulting professional services,4050.0
+Unknown,Internal Medicine,Food & Beverage,1236.04
+Unknown,Internal Medicine,Travel & Lodging,1280.74
+Unknown,Medical,Food & Beverage,99.46000000000001
+Unknown,Medical Oncology,Food & Beverage,282.0
+Unknown,Nephrology,Food & Beverage,39.41
+Unknown,Neuro-ophthalmology,Consulting,650.0
+Unknown,Neurology,Consulting,4680.0
+Unknown,Neurology,Food & Beverage,1222.28
+Unknown,Neurology,Non-consulting professional services,1125.0
+Unknown,Neurology,Travel & Lodging,3023.05
+Unknown,"Nurse Anesthetist, Certified Registered",Food & Beverage,16.76
+Unknown,Nurse Practitioner,Food & Beverage,227.73
+Unknown,Obstetrics & Gynecology,Food & Beverage,181.86
+Unknown,Ophthalmology,Food & Beverage,259.05
+Unknown,Optometrist,Food & Beverage,816.79
+Unknown,Optometrist,Travel & Lodging,1200.55
+Unknown,Oral and Maxillofacial Pathology,Food & Beverage,20.2
+Unknown,Orthodontics and Dentofacial Orthopedics,Education,220.59
+Unknown,Orthopaedic Surgery,Food & Beverage,2332.43
+Unknown,Orthopaedic Surgery,Travel & Lodging,2117.95
+Unknown,Orthopaedic Surgery of the Spine,Food & Beverage,2029.6
+Unknown,Orthopaedic Surgery of the Spine,Travel & Lodging,1669.7
+Unknown,Otolaryngology,Food & Beverage,110.93
+Unknown,Pediatric Cardiology,Food & Beverage,145.72
+Unknown,Pediatric Surgery,Food & Beverage,56.12
+Unknown,Pediatrics,Food & Beverage,146.64000000000001
+Unknown,Pediatrics,Honoraria,753.87
+Unknown,Pediatrics,Travel & Lodging,123.17
+Unknown,Periodontics,Food & Beverage,55.589999999999996
+Unknown,Periodontics,Non-consulting professional services,4000.0
+Unknown,Periodontics,Travel & Lodging,1608.54
+Unknown,Physician Assistant,Food & Beverage,403.77
+Unknown,Plastic Surgery,Food & Beverage,80.53999999999999
+Unknown,Psychiatric/Mental Health,Food & Beverage,413.51
+Unknown,Psychiatry,Consulting,558.63
+Unknown,Psychiatry,Food & Beverage,374.31
+Unknown,Psychiatry,Non-consulting professional services,1882.8000000000002
+Unknown,Psychiatry,Travel & Lodging,59.37
+Unknown,Pulmonary Disease,Food & Beverage,17.69
+Unknown,Rheumatology,Food & Beverage,34.95
+Unknown,Sports Medicine,Food & Beverage,525.6800000000001
+Unknown,Sports Medicine,Grant,11000.0
+Unknown,Sports Medicine,Travel & Lodging,1487.19
+Unknown,Surgery,Food & Beverage,537.56
+Unknown,Surgical,Food & Beverage,395.05
+Unknown,Surgical Critical Care,Food & Beverage,18.1
+Unknown,Thoracic Surgery (Cardiothoracic Vascular Surgery),Food & Beverage,1059.27
+Unknown,Thoracic Surgery (Cardiothoracic Vascular Surgery),Travel & Lodging,1978.3600000000001
+Unknown,Urology,Food & Beverage,904.92
+Unknown,Urology,Travel & Lodging,1679.84
+Unknown,Vascular & Interventional Radiology,Food & Beverage,288.34000000000003
+Unknown,Vascular & Interventional Radiology,Travel & Lodging,680.4599999999999
+Unknown,Vascular Surgery,Food & Beverage,335.07
+Unknown,Vascular Surgery,Travel & Lodging,1377.68
 VA,Acute Care,Consulting,16175.0
 VA,Acute Care,Education,1984.5
 VA,Acute Care,Food & Beverage,94417.2
@@ -32756,6 +33208,14 @@ VA,Trauma Surgery,Food & Beverage,812.03
 VA,Undersea and Hyperbaric Medicine,Consulting,400.0
 VA,Undersea and Hyperbaric Medicine,Food & Beverage,1095.57
 VA,Undersea and Hyperbaric Medicine,Travel & Lodging,497.66
+VA,Unknown,Consulting,50615.55
+VA,Unknown,Device / Supply Loan,309287.08999999997
+VA,Unknown,Education,85515.95
+VA,Unknown,Food & Beverage,3024.48
+VA,Unknown,Grant,633685.3200000001
+VA,Unknown,Non-consulting professional services,389343.77
+VA,Unknown,Other,509670.58
+VA,Unknown,Royalty / License,126597.75
 VA,Urogynecology and Reconstructive Pelvic Surgery,Education,2000.0
 VA,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,6190.91
 VA,Urogynecology and Reconstructive Pelvic Surgery,Non-consulting professional services,16612.5
@@ -33037,6 +33497,12 @@ VT,Thoracic Surgery (Cardiothoracic Vascular Surgery),Food & Beverage,401.08
 VT,Transplant Surgery,Food & Beverage,186.2
 VT,Trauma Surgery,Food & Beverage,165.88
 VT,Trauma Surgery,Travel & Lodging,754.8699999999999
+VT,Unknown,Device / Supply Loan,94570.87
+VT,Unknown,Education,225.0
+VT,Unknown,Grant,68842.0
+VT,Unknown,Non-consulting professional services,3325.0
+VT,Unknown,Other,16449.41
+VT,Unknown,Royalty / License,53.0
 VT,Urology,Food & Beverage,860.09
 VT,Urology,Travel & Lodging,1214.81
 VT,Vascular & Interventional Radiology,Consulting,3631.38
@@ -33809,6 +34275,15 @@ WA,Trauma Surgery,Food & Beverage,1324.32
 WA,Trauma Surgery,Other,16.25
 WA,Trauma Surgery,Travel & Lodging,2998.9
 WA,Undersea and Hyperbaric Medicine,Food & Beverage,115.37
+WA,Unknown,Consulting,123708.76999999999
+WA,Unknown,Device / Supply Loan,354091.05
+WA,Unknown,Education,134453.63
+WA,Unknown,Food & Beverage,2382.14
+WA,Unknown,Grant,3742270.13
+WA,Unknown,Non-consulting professional services,2547670.49
+WA,Unknown,Other,529241.75
+WA,Unknown,Royalty / License,6471795.54
+WA,Unknown,Travel & Lodging,1259.83
 WA,Urogynecology and Reconstructive Pelvic Surgery,Education,4228.79
 WA,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,1542.22
 WA,Urogynecology and Reconstructive Pelvic Surgery,Non-consulting professional services,23787.5
@@ -34517,6 +34992,12 @@ WI,Trauma Surgery,Non-consulting professional services,7750.0
 WI,Trauma Surgery,Travel & Lodging,5068.25
 WI,Undersea and Hyperbaric Medicine,Food & Beverage,2170.84
 WI,Undersea and Hyperbaric Medicine,Travel & Lodging,124.87
+WI,Unknown,Consulting,8849.0
+WI,Unknown,Device / Supply Loan,405970.48000000004
+WI,Unknown,Education,58730.81
+WI,Unknown,Grant,58663.23
+WI,Unknown,Non-consulting professional services,178288.6
+WI,Unknown,Other,96664.14
 WI,Urogynecology and Reconstructive Pelvic Surgery,Education,4000.0
 WI,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,5142.15
 WI,Urogynecology and Reconstructive Pelvic Surgery,Other,56.989999999999995
@@ -34982,6 +35463,13 @@ WV,Thoracic Surgery (Cardiothoracic Vascular Surgery),Non-consulting professiona
 WV,Thoracic Surgery (Cardiothoracic Vascular Surgery),Travel & Lodging,10173.08
 WV,Transplant Surgery,Food & Beverage,52.91
 WV,Trauma Surgery,Food & Beverage,18.95
+WV,Unknown,Consulting,781.46
+WV,Unknown,Device / Supply Loan,232005.65
+WV,Unknown,Education,30000.0
+WV,Unknown,Food & Beverage,127.14
+WV,Unknown,Grant,13372.0
+WV,Unknown,Non-consulting professional services,85274.45
+WV,Unknown,Other,100434.65
 WV,Urogynecology and Reconstructive Pelvic Surgery,Education,74.99
 WV,Urogynecology and Reconstructive Pelvic Surgery,Food & Beverage,2246.75
 WV,Urogynecology and Reconstructive Pelvic Surgery,Non-consulting professional services,32500.0
@@ -35203,6 +35691,11 @@ WY,Surgical,Food & Beverage,1964.09
 WY,Surgical,Travel & Lodging,4056.54
 WY,Surgical Critical Care,Food & Beverage,120.13
 WY,Thoracic Surgery (Cardiothoracic Vascular Surgery),Food & Beverage,612.85
+WY,Unknown,Consulting,779.0
+WY,Unknown,Device / Supply Loan,14.1
+WY,Unknown,Food & Beverage,1111.21
+WY,Unknown,Non-consulting professional services,4975.69
+WY,Unknown,Other,409.24
 WY,Urology,Education,245.76
 WY,Urology,Food & Beverage,4362.99
 WY,Urology,Travel & Lodging,261.38

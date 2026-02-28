@@ -56,8 +56,13 @@ def run_preprocessing():
     })
 
     # Clean specialty names
-    payments_df["specialty_clean"] = payments_df["specialty"].str.split("|").str[-1].str.strip()
-    payments_df.head()
+    payments_df["specialty_clean"] = (
+    payments_df["specialty"]
+    .str.split("|")
+    .str[-1]
+    .str.strip()
+    .fillna("Unknown")
+)
     
     # Mapping for Nature of Payments (Cleaning up long descriptions)
     nature_map = {    
@@ -80,6 +85,7 @@ def run_preprocessing():
         .map(nature_map)
         .fillna("Other")
     )
+    payments_df["state"] = payments_df["state"].fillna("Unknown")
 
     # --- STEP 4: ACS Data Preparation ---
     print("Processing ACS Census data...")
