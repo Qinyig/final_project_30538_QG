@@ -1,0 +1,163 @@
+---
+title: "CMS Open Payments Analysis"
+subtitle: "30538 Final Project"
+author: "Quinn Gan"
+date: today
+format: 
+  html:
+    code-fold: true
+execute:
+  echo: true
+---
+
+This project analyzes the CMS Open Payments dataset for the 2023 fiscal year. The Open Payments program is a national initiative to increase transparency in healthcare. It documents the financial relationships between drug manufacturers and healthcare providers. Our study examines the General Payments dataset on a national scale. 
+
+Our analysis serves healthcare policy researchers, hospital administrators, or compliance teams who want to understand how industry payments to physicians are distributed and where potential concentration or conflict-of-interest risks may lie.
+
+Our program pulls data directly from the CMS Metastore API. We use a programmatic loop to handle large amounts of data. This method ensures we capture a complete set of records for our analysis.
+
+
+## 1. Distribution of Healthcare Payments by Specialty
+
+As proposed in the research questions, one of the primary goals is to identify which medical sectors receive the most significant financial influence from the pharmaceutical and medical device industries. By analyzing the top specialties, we can determine if high-stakes fields like Neurology (often associated with Parkinson's research) or Cardiology are disproportionately represented in industry spending.
+
+```{python}
+#| label: specialty-analysis
+import pandas as pd
+import altair as alt
+
+# Load the detailed payment dataset
+df_details = pd.read_csv("data/derived-data/cms_payments_details.csv")
+
+# Aggregate global totals per specialty for the ranking
+spec_rank = df_details.groupby('specialty_clean')['payment_amount'].sum().nlargest(10).reset_index()
+
+# Visualization: Horizontal Bar Chart for Rankings
+spec_chart = alt.Chart(spec_rank).mark_bar().encode(
+    x=alt.X('payment_amount:Q', title='Total Industry Payments (USD)', axis=alt.Axis(format='$.2s')),
+    y=alt.Y('specialty_clean:N', sort='-x', title='Medical Specialty'),
+    color=alt.Color('payment_amount:Q', scale=alt.Scale(scheme='blues'), legend=None),
+    tooltip=['specialty_clean', alt.Tooltip('payment_amount:Q', format='$,.0f')]
+).properties(
+    title='Top 10 Medical Specialties by Industry Funding Intensity (2023)',
+    width=600,
+    height=300
+)
+
+spec_chart.display()
+```
+
+This figure shows the distribution of total payment amounts across medical specialties, highlighting substantial heterogeneity in industry payments at the specialty level. Orthopaedic Surgery stands out clearly, receiving far higher total payments than any other specialty in the top ten. This suggests that industry relationships in orthopaedics involve particularly large financial flows, likely driven by device-intensive care and intellectual property–related arrangements.
+
+Internal Medicine, Neurology, and Dermatology follow at a distance, while the remaining specialties cluster at much lower total payment levels. The sharp drop-off after the top specialty indicates that industry payments are highly concentrated not only by payment type, but also by clinical specialty.
+
+Taken together, this pattern suggests that financial interactions between industry and providers are not evenly distributed across the healthcare system. Instead, they are concentrated in a small set of specialties where product development, devices, and procedural care play a larger role, which may warrant closer attention from a transparency and compliance perspective.
+
+## 2. Categorization of Financial Incentives (Nature of Payment)
+
+Beyond "how much" is being paid,  project aims to understand "how" these funds are transferred. In the project proposal, we hypothesized that non-research related payments, such as consulting fees and travel, might pose different ethical implications than direct research grants. This visualization breaks down the nature of payments to identify the most common forms of industry-physician interaction.
+
+```{python}
+#| label: payment-type-distribution
+# Aggregate by the cleaned payment categories from your preprocessing
+type_dist = df_details.groupby('payment_type_clean')['payment_amount'].sum().reset_index()
+
+# Visualization: Donut Chart
+type_chart = alt.Chart(type_dist).mark_arc(innerRadius=60).encode(
+    theta=alt.Theta(field="payment_amount", type="quantitative"),
+    color=alt.Color(field="payment_type_clean", type="nominal", 
+                    title="Payment Nature",
+                    sort=alt.EncodingSortField(field="payment_amount", order='descending')),
+    tooltip=['payment_type_clean', alt.Tooltip('payment_amount:Q', format='$,.0f')]
+).properties(
+    title='Proportional Distribution of Industry Payment Types',
+    width=400,
+    height=400
+)
+
+type_chart.display()
+
+
+```
+
+This figure shows a highly concentrated distribution of total payment amounts across payment types. Royalty and License payments dominate by a wide margin, accounting for the largest share of total dollars despite representing a relatively small number of transactions. This suggests that intellectual property–related relationships generate very large, infrequent payments compared to other categories.
+
+In contrast, Food & Beverage and Travel & Lodging involve a massive number of payments but much smaller amounts per transaction, indicating these categories are driven by routine, low-value interactions rather than large financial transfers. Consulting and non-consulting professional services fall in between, combining moderately high payment volumes with substantial total amounts.
+
+Overall, the figure highlights a key pattern in Open Payments data: most transactions are small and routine, but most money is concentrated in a few high-value payment categories, especially those tied to intellectual property and professional services. This distinction is important for understanding where financial influence in the healthcare industry is most economically significant.
+
+III. Socio-economic Correlation: Income vs. Payments
+
+The core policy question addresses whether industry funding is concentrated in wealthier geographic areas. By merging CMS data with ACS median household income, we test if pharmaceutical marketing resources align with higher regional purchasing power. We use Payment per Household to normalize the data across states with different population sizes.
+
+```{python}
+#| label: socio-economic-correlation
+# Load the state-level summary with economic indicators
+df_state = pd.read_csv("data/derived-data/cms_acs_state_summary.csv")
+
+# Visualization: Scatter Plot with Regression
+scatter = alt.Chart(df_state).mark_circle(size=100, opacity=0.7).encode(
+    x=alt.X('median_income:Q', 
+            title='State Median Household Income (USD)', 
+            scale=alt.Scale(zero=False)),
+    y=alt.Y('payment_per_household:Q', 
+            title='Industry Payment per Household (USD)'),
+    color=alt.value('steelblue'),
+    tooltip=['state_name', 
+             alt.Tooltip('median_income:Q', format='$,.0f'), 
+             alt.Tooltip('payment_per_household:Q', format='$.2f')]
+).properties(
+    title='Correlation: State Household Wealth vs. Healthcare Industry Payments',
+    width=600,
+    height=400
+)
+
+# Add a linear regression line to visualize the trend
+final_plot = scatter + scatter.transform_regression('median_income', 'payment_per_household').mark_line(color='red')
+
+final_plot.display()
+```
+
+4. Spatial Analysis
+```{python}
+#| label: national-map
+from vega_datasets import data
+
+# Load US states topojson
+states_topo = alt.topo_feature(data.us_10m.url, 'states')
+
+# Map state abbreviations to numeric IDs for Altair mapping
+# (This ensures your 'state' column matches the Map IDs)
+state_id_map = {
+    'AL': 1, 'AK': 2, 'AZ': 4, 'AR': 5, 'CA': 6, 'CO': 8, 'CT': 9, 'DE': 10, 'FL': 12, 'GA': 13,
+    'HI': 15, 'ID': 16, 'IL': 17, 'IN': 18, 'IA': 19, 'KS': 20, 'KY': 21, 'LA': 22, 'ME': 23,
+    'MD': 24, 'MA': 25, 'MI': 26, 'MN': 27, 'MS': 28, 'MO': 29, 'MT': 30, 'NE': 31, 'NV': 32,
+    'NH': 33, 'NJ': 34, 'NM': 35, 'NY': 36, 'NC': 37, 'ND': 38, 'OH': 39, 'OK': 40, 'OR': 41,
+    'PA': 42, 'RI': 44, 'SC': 45, 'SD': 46, 'TN': 47, 'TX': 48, 'UT': 49, 'VT': 50, 'VA': 51,
+    'WA': 53, 'WV': 54, 'WI': 55, 'WY': 56
+}
+df_state['id'] = df_state['state'].map(state_id_map)
+
+# Visualization: Interactive Choropleth Map
+map_chart = alt.Chart(states_topo).mark_geoshape().encode(
+    color=alt.Color('payment_per_household:Q', 
+                    title='Payment/Household ($)', 
+                    scale=alt.Scale(scheme='tealblues')),
+    tooltip=[
+        alt.Tooltip('state_name:N', title='State'),
+        alt.Tooltip('payment_per_household:Q', title='Payment Density', format='$.2f'),
+        alt.Tooltip('median_income:Q', title='Median Income', format='$,.0f')
+    ]
+).transform_lookup(
+    lookup='id',
+    from_=alt.LookupData(df_state, 'id', ['payment_per_household', 'state_name', 'median_income'])
+).project(
+    type='albersUsa'
+).properties(
+    title='Geographic Density of Industry Payments Across the US (2023)',
+    width=700,
+    height=400
+)
+
+map_chart.display()
+```
