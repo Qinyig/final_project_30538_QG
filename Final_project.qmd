@@ -27,7 +27,7 @@ import pandas as pd
 import altair as alt
 
 # Load the detailed payment dataset
-df_details = pd.read_csv("data/derived-data/cms_payments_details.csv")
+df_details_fresh = pd.read_csv("data/derived-data/cms_payments_details.csv")
 
 # Aggregate global totals per specialty for the ranking
 spec_rank = df_details.groupby('specialty_clean')['payment_amount'].sum().nlargest(10).reset_index()
@@ -161,3 +161,4 @@ map_chart = alt.Chart(states_topo).mark_geoshape().encode(
 
 map_chart.display()
 ```
+
