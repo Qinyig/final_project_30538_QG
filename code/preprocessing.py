@@ -49,10 +49,11 @@ def run_preprocessing():
     # Standardize column names
     payments_df.columns = payments_df.columns.str.lower()
     payments_df = payments_df.rename(columns={
-        "nature_of_payment_or_transfer_of_value": "payment_type",
+        "covered_recipient_profile_id": "recipient_id",
         "total_amount_of_payment_usdollars": "payment_amount",
         "recipient_state": "state",
-        "covered_recipient_specialty_1": "specialty"
+        "covered_recipient_specialty_1": "specialty",
+        "nature_of_payment_or_transfer_of_value": "payment_type"
     })
 
     # Clean specialty names
@@ -128,7 +129,23 @@ def run_preprocessing():
     }
     df_policy_acs['state_abbr'] = df_policy_acs['state_name'].map(state_to_abbr)
 
-    # --- STEP 5: Merge CMS & ACS ---
+    # --- STEP 5: Concentration Analysis (Gini/Inequality Evidence) ---
+    print("Calculating payment concentration (Top 1% Analysis)...")
+    # Aggregate total payments per unique recipient ID
+    recipient_totals = (
+        payments_df.groupby('recipient_id')['payment_amount']
+        .sum()
+        .sort_values(ascending=False)
+        .reset_index()
+    )
+    # Calculate cumulative percentage of funds vs cumulative percentage of people
+    recipient_totals['cum_percent_money'] = recipient_totals['payment_amount'].cumsum() / recipient_totals['payment_amount'].sum()
+    recipient_totals['cum_percent_people'] = (recipient_totals.index + 1) / len(recipient_totals)
+    
+    # Export for Lorenz Curve visualization
+    recipient_totals.to_csv("data/derived-data/concentration_data.csv", index=False)
+ 
+    # --- STEP 6: Merge CMS & ACS ---
     print("Merging datasets...")
     state_summary = payments_df.groupby('state')['payment_amount'].sum().reset_index()
     map_data = pd.merge(state_summary, df_policy_acs, left_on='state', right_on='state_abbr', how='inner')
@@ -137,7 +154,7 @@ def run_preprocessing():
     # Normalize
     map_data.to_csv("data/derived-data/cms_acs_state_summary.csv", index=False)
 
-    # --- STEP 6: Save to Derived Data ---
+    # --- STEP 7: Save to Derived Data ---
     detail_data = payments_df.groupby(['state', 'specialty_clean', 'payment_type_clean'])['payment_amount'].sum().reset_index()
     detail_data.to_csv("data/derived-data/cms_payments_details.csv", index=False)
     print("Preprocessing complete! Saved state summary and detailed payment files.")
