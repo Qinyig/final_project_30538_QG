@@ -58,24 +58,27 @@ Taken together, this pattern suggests that financial interactions between indust
 Beyond "how much" is being paid,  project aims to understand "how" these funds are transferred. In the project proposal, we hypothesized that non-research related payments, such as consulting fees and travel, might pose different ethical implications than direct research grants. This visualization breaks down the nature of payments to identify the most common forms of industry-physician interaction.
 
 ```{python}
+print(f"QMD Current Working Directory: {os.getcwd()}")
+
+# 2. 找到它正在读取的文件绝对路径
+file_path = "data/derived-data/cms_payments_details.csv"
+abs_path = os.path.abspath(file_path)
+print(f"Absolute path QMD is reading: {abs_path}")
+```
+
+```{python}
 #| label: payment-type-distribution
-# Aggregate by the cleaned payment categories from your preprocessing
-type_dist = df_details.groupby('payment_type_clean')['payment_amount'].sum().reset_index()
+import pandas as pd
+import altair as alt
 
-# Visualization: Donut Chart
-type_chart = alt.Chart(type_dist).mark_arc(innerRadius=60).encode(
-    theta=alt.Theta(field="payment_amount", type="quantitative"),
-    color=alt.Color(field="payment_type_clean", type="nominal", 
-                    title="Payment Nature",
-                    sort=alt.EncodingSortField(field="payment_amount", order='descending')),
-    tooltip=['payment_type_clean', alt.Tooltip('payment_amount:Q', format='$,.0f')]
-).properties(
-    title='Proportional Distribution of Industry Payment Types',
-    width=400,
-    height=400
-)
+# 1. 显式地重新读取硬盘文件
+df_viz = pd.read_csv("data/derived-data/cms_payments_details.csv")
 
-type_chart.display()
+# 2. 在绘图前进行检查 (这一行会在 QMD 渲染时打印出数字)
+# 看看这里的 Royalty / License 是不是 1.197829e+09
+check_data = df_viz.groupby('payment_type_clean')['payment_amount'].sum().reset_index()
+print("DEBUG CHECK - Sum of payments by type:")
+print(check_data.sort_values('payment_amount', ascending=False))
 
 
 ```
