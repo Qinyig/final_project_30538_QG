@@ -10,16 +10,62 @@ execute:
   echo: true
 ---
 
-This project analyzes the CMS Open Payments dataset for the 2023 fiscal year. The Open Payments program is a national initiative to increase transparency in healthcare. It documents the financial relationships between drug manufacturers and healthcare providers. Our study examines the General Payments dataset on a national scale. 
 
-Our analysis serves healthcare policy researchers, hospital administrators, or compliance teams who want to understand how industry payments to physicians are distributed and where potential concentration or conflict-of-interest risks may lie.
+# Money in Medicine: Structural and Geographic Concentration of Industry Payments (2023)
 
-Our program pulls data directly from the CMS Metastore API. We use a programmatic loop to handle large amounts of data. This method ensures we capture a complete set of records for our analysis.
+## Introduction
+
+The Physician Payment Sunshine Act, enacted as part of the Affordable Care Act, was designed to increase transparency in financial relationships between the healthcare industry and medical providers. Through the CMS Open Payments program, pharmaceutical and medical device manufacturers are required to publicly report payments made to physicians and teaching hospitals. This policy intervention rests on the premise that transparency can mitigate conflicts of interest and promote accountability in healthcare decision-making. 
+
+However, transparency alone does not answer deeper structural questions. While the data reveal who receives payments and in what amounts, they do not immediately clarify how industry funding is distributed across clinical specialties, payment types, or geographic regions. Understanding these distributional patterns is essential for evaluating whether industry influence is diffuse and routine, or concentrated and potentially policy-relevant. 
+
+This project moves beyond descriptive transparency to examine the structural and geographic concentration of pharmaceutical industry payments in 2023. By integrating CMS Open Payments data with socio-economic indicators from the American Community Survey (ACS), this analysis explores whether industry payments are aligned with population characteristics or clustered in ways that may have implications for equity and conflict-of-interest oversight. 
+
+## Background
+
+Industry–physician financial relationships take many forms, ranging from small-value food and beverage payments to large royalty or licensing agreements tied to intellectual property. These relationships can support medical innovation, research collaboration, and product development. At the same time, they may raise concerns about potential conflicts of interest, especially when payments are highly concentrated in specific specialties or regions. 
+
+Previous discussions surrounding Open Payments data often focus on total dollar amounts or individual high-profile cases. However, aggregate totals can obscure important structural patterns. For example:
+
+* **Specialty Disparity**: Are payments evenly distributed across medical specialties, or concentrated in device-intensive or procedure-heavy fields? 
+* **Structural Origin**: Do high-value payments stem primarily from routine marketing activities or from intellectual property arrangements (e.g., Royalties)? 
+* **Economic Clustering**: Are industry payments geographically aligned with population size and need, or disproportionately concentrated in certain economic environments? 
+
+Answering these questions requires combining disaggregated federal payment records with demographic and economic data. By linking CMS General Payments data with ACS state-level income and household indicators, this project constructs normalized measures of payment intensity that allow for meaningful cross-state comparisons. 
+
+## Research Questions
+
+This project addresses three primary research questions to evaluate the landscape of industry influence in 2023:
+
+### 1. Structural Concentration Across Specialties and Payment Types
+
+How are pharmaceutical industry payments distributed across medical specialties and categories of financial transfers?
+
+* Which specialties receive the highest total industry payments? 
+* Are total payment dollars concentrated in a small number of high-value payment categories (e.g., royalties and licensing) relative to routine transaction types? 
+* This question examines whether industry influence is structurally concentrated within particular clinical and financial ecosystems. 
+
+
+### 2. Geographic Distribution and Payment Intensity
+
+When normalized by population size or number of households, how do industry payments vary across states?
+
+* Which states exhibit the highest payment intensity per household? 
+* Do spatial clusters of industry funding emerge beyond what would be expected from population differences alone? 
+
+
+### 3. Socio-economic Alignment
+
+Is there a relationship between regional economic conditions and industry payment intensity?
+
+* Is median household income statistically associated with industry payment per household? 
+* Do higher-income states receive systematically greater industry funding? 
+* This question explores whether industry financial relationships align with wealth patterns, which may have implications for how industry influence is distributed across different economic environments. 
 
 
 ## 1. Distribution of Healthcare Payments by Specialty
 
-As proposed in the research questions, one of the primary goals is to identify which medical sectors receive the most significant financial influence from the pharmaceutical and medical device industries. By analyzing the top specialties, we can determine if high-stakes fields like Neurology (often associated with Parkinson's research) or Cardiology are disproportionately represented in industry spending.
+To begin, I examine how industry payments are distributed across medical specialties in 2023. If financial relationships were evenly distributed, we would expect funding to be relatively similar across specialties. However, this figure reveals a highly concentrated pattern.
 
 ```{python}
 #| label: specialty-analysis
@@ -27,7 +73,7 @@ import pandas as pd
 import altair as alt
 
 # Load the detailed payment dataset
-df_details_fresh = pd.read_csv("data/derived-data/cms_payments_details.csv")
+df_details = pd.read_csv("data/derived-data/cms_payments_details.csv")
 
 # Aggregate global totals per specialty for the ranking
 spec_rank = df_details.groupby('specialty_clean')['payment_amount'].sum().nlargest(10).reset_index()
@@ -47,51 +93,107 @@ spec_chart = alt.Chart(spec_rank).mark_bar().encode(
 spec_chart.display()
 ```
 
-This figure shows the distribution of total payment amounts across medical specialties, highlighting substantial heterogeneity in industry payments at the specialty level. Orthopaedic Surgery stands out clearly, receiving far higher total payments than any other specialty in the top ten. This suggests that industry relationships in orthopaedics involve particularly large financial flows, likely driven by device-intensive care and intellectual property–related arrangements.
+### Data Findings & Logical Decomposition
 
-Internal Medicine, Neurology, and Dermatology follow at a distance, while the remaining specialties cluster at much lower total payment levels. The sharp drop-off after the top specialty indicates that industry payments are highly concentrated not only by payment type, but also by clinical specialty.
+* **The Transparency Blind Spot: Dominance of "Unknown" Specialties**
+* The visualization indicates that the "Unknown" category commands the highest share of funding, totaling nearly **$800 million**.
+* In a policy context, this is not merely a statistical omission but a deep-seated phenomenon: it reveals that a massive volume of capital flows to individuals or entities without a registered clinical specialty in the CMS system.
+* Synthesizing this with payment nature data, these payments are largely tied to high-value **Royalty or License** agreements for intellectual property, often paid to researchers or non-practicing physicians.
+* This highlights that the industry’s most potent economic incentives are often shielded within the "upstream" segments of the transparency framework, where professional identities are less defined.
 
-Taken together, this pattern suggests that financial interactions between industry and providers are not evenly distributed across the healthcare system. Instead, they are concentrated in a small set of specialties where product development, devices, and procedural care play a larger role, which may warrant closer attention from a transparency and compliance perspective.
 
-## 2. Categorization of Financial Incentives (Nature of Payment)
+* **The Siphoning Effect of Technology-Intensive Specialties**
+* Among identified clinical fields, **Orthopaedic Surgery** leads significantly with over **$400 million** in total funding.
+* **High-Value Device Logic**: The high rankings of Orthopaedics and **Neurological Surgery** validate the hypothesis that industry funding is heavily concentrated in sectors reliant on expensive, high-tech medical devices.
+* **Divergent Interaction Models**: A contrast emerges when comparing **Internal Medicine**, which ranks second in total value but boasts over **1.3 million individual payments**—nearly six times the frequency of Orthopaedics.
+* This reveals two distinct industry strategies: "high-stakes technical bonding" for surgical specialties versus "high-frequency marketing coverage" for primary care and internal medicine.
 
-Beyond "how much" is being paid,  project aims to understand "how" these funds are transferred. In the project proposal, we hypothesized that non-research related payments, such as consulting fees and travel, might pose different ethical implications than direct research grants. This visualization breaks down the nature of payments to identify the most common forms of industry-physician interaction.
 
-```{python}
-print(f"QMD Current Working Directory: {os.getcwd()}")
 
-# 2. 找到它正在读取的文件绝对路径
-file_path = "data/derived-data/cms_payments_details.csv"
-abs_path = os.path.abspath(file_path)
-print(f"Absolute path QMD is reading: {abs_path}")
+```python
+#| label: specialty-analysis
+#| echo: false
 ```
+
+### Core Conclusion: The Genesis of Structural Inequality
+
+The results of this distribution analysis provide direct evidence regarding the concentration of resources:
+
+1. **Extreme Resource Imbalance**: Industry sponsorship is not distributed based on patient volume or disease burden; instead, it is heavily skewed toward high-profit, device-driven disciplines.
+2. **Conflict of Interest Hotspots**: The high funding intensity in Orthopaedics and Cardiovascular Disease implies that clinical guidelines and product selections in these fields face a much higher risk of Conflict of Interest (COI) than other disciplines.
+3. **Preliminary Evidence of Inequality**: This financial chasm between specialties may create an internal economic hierarchy within the medical system, driven by varying levels of industrial support.
+
+
+
+## 2. Proportional Distribution of Industry Payment Types
+
+While the specialty distribution illustrates a horizontal concentration across different fields, it does not explain how these payments are structured. Specifically: What is the nature of these payments? Are they routine meal expenses spread across many, or multi-million dollar royalties monopolized by a few?
+
+The subsequent **"Payment Type Distribution Analysis"** will decode the specific composition of these economic weights, further deconstructing the operational mechanisms of industry influence.
 
 ```{python}
 #| label: payment-type-distribution
-import pandas as pd
-import altair as alt
+# 2. Data aggregation
+type_dist = df_details.groupby('payment_type_clean')['payment_amount'].sum().reset_index()
 
-# 1. 显式地重新读取硬盘文件
-df_viz = pd.read_csv("data/derived-data/cms_payments_details.csv")
+# Visualization: Donut Chart
+type_chart = alt.Chart(type_dist).mark_arc(innerRadius=60).encode(
+    theta=alt.Theta(field="payment_amount", type="quantitative"),
+    color=alt.Color(field="payment_type_clean", type="nominal", 
+                    title="Payment Nature",
+                    sort=alt.EncodingSortField(field="payment_amount", order='descending')),
+    tooltip=[
+        alt.Tooltip('payment_type_clean:N', title='Category'),
+        alt.Tooltip('payment_amount:Q', format='$,.0f', title='Total Amount')
+    ]
+).properties(
+    title='Proportional Distribution of Industry Payment Types (2023)',
+    width=400,
+    height=400
+)
 
-# 2. 在绘图前进行检查 (这一行会在 QMD 渲染时打印出数字)
-# 看看这里的 Royalty / License 是不是 1.197829e+09
-check_data = df_viz.groupby('payment_type_clean')['payment_amount'].sum().reset_index()
-print("DEBUG CHECK - Sum of payments by type:")
-print(check_data.sort_values('payment_amount', ascending=False))
+type_chart.display()
 
 
 ```
 
-This figure shows a highly concentrated distribution of total payment amounts across payment types. Royalty and License payments dominate by a wide margin, accounting for the largest share of total dollars despite representing a relatively small number of transactions. This suggests that intellectual property–related relationships generate very large, infrequent payments compared to other categories.
+### Data Findings & Logical Decomposition
 
-In contrast, Food & Beverage and Travel & Lodging involve a massive number of payments but much smaller amounts per transaction, indicating these categories are driven by routine, low-value interactions rather than large financial transfers. Consulting and non-consulting professional services fall in between, combining moderately high payment volumes with substantial total amounts.
+* **The Core of Economic Weight: Royalty & License**
+* The donut chart reveals that **Royalty / License** fees command the largest share of total funding, amounting to approximately **$1.19 billion**.
+* This confirms that the industry's primary economic incentives are not scattered daily subsidies but long-term financial interests deeply tied to intellectual property.
+* Such massive payments are typically concentrated among a small number of highly influential researchers or institutions.
 
-Overall, the figure highlights a key pattern in Open Payments data: most transactions are small and routine, but most money is concentrated in a few high-value payment categories, especially those tied to intellectual property and professional services. This distinction is important for understanding where financial influence in the healthcare industry is most economically significant.
 
-III. Socio-economic Correlation: Income vs. Payments
+* **Deep Penetration into Professional Decision-Making: Consulting & Professional Services**
+* **Non-consulting professional services** and **Consulting fees** represent the second-largest tier of funding.
+* This reflects a strategic partnership where the industry hires physicians as speakers or consultants, integrating financial interests into academic dissemination and clinical decision-making processes.
 
-The core policy question addresses whether industry funding is concentrated in wealthier geographic areas. By merging CMS data with ACS median household income, we test if pharmaceutical marketing resources align with higher regional purchasing power. We use Payment per Household to normalize the data across states with different population sizes.
+
+* **Normalization of Routine Interaction: Food & Beverage**
+* Although **Food & Beverage** payments account for a much smaller percentage of the total dollar amount, they occur with extreme frequency.
+* This "high-frequency, low-value" interaction model represents a pervasive penetration into the daily lives of clinicians, aiming to build brand familiarity and maintain relationships through subtle, sustained influence.
+
+
+
+```python
+#| label: payment-type-distribution
+#| echo: false
+
+```
+
+### Core Conclusion: Deep Economic Integration
+
+The distribution of payment types addresses the vertical structure of industry influence:
+
+1. **Asymmetry of Financial Ties**: A disproportionate amount of capital flows via royalties to a tiny elite, creating significant economic monopolies that may exacerbate resource inequality within the medical field.
+2. **Risks to Professional Autonomy**: The prevalence of consulting and service fees increases the risk of professional judgment being influenced by financial interests, particularly in specialties where high-value payments are concentrated.
+3. **Diversified Penetration Strategies**: Industry utilizes a dual strategy of "high-stakes economic bonding" and "high-frequency routine penetration" to shape the healthcare ecosystem comprehensively.
+
+
+## 3. Wealth Alignment Analysis: Socio-economic Indicators and Industry Payments
+
+Following the analysis of "horizontal concentration" by specialty and "vertical weight" by payment nature, this section explores whether these industrial funds are geographically tied to regional economic levels. By integrating socio-economic indicators from the **American Community Survey (ACS)**, we conduct a correlation test between state median household income and the intensity of industry funding received per household.
 
 ```{python}
 #| label: socio-economic-correlation
@@ -121,7 +223,37 @@ final_plot = scatter + scatter.transform_regression('median_income', 'payment_pe
 final_plot.display()
 ```
 
-4. Spatial Analysis
+### Data Findings & Logical Decomposition
+
+* **Significant Positive Correlation Trend**
+* The scatter plot and the fitted regression line demonstrate a clear positive relationship between **State Median Household Income** and **Industry Payment per Household**.
+* This finding validates a market-driven logic: industry capital is not primarily directed toward economically disadvantaged areas to fill basic healthcare gaps; instead, it tends to gravitate toward the healthcare ecosystems of wealthier regions. This likely reflects the higher purchasing power, more advanced medical facilities, and broader private insurance coverage in high-income areas, which in turn attracts greater industry intervention.
+
+
+* **Extreme Outliers in High-Income States**
+* Notably, in the high-income bracket where median income exceeds **$70,000**, several significant outliers appear far above the regression line.
+* **Policy Interpretation**: These outliers typically represent states housing top-tier research and teaching hospitals, high-tech biomedical clusters, or holders of high-value specific patents (e.g., California or Massachusetts). In these regions, industry funding has evolved beyond routine marketing into deep capital and technological integration.
+
+
+
+```python
+#| label: wealth-correlation-analysis
+#| echo: false
+
+```
+
+### Core Conclusion: Shaping the Distribution of Influence via Economic Environments
+
+This correlation analysis directly addresses research questions regarding social equity:
+
+1. **Wealth Alignment Effect**: Industry payments exhibit a distinct "preference for prosperity" in their geographic distribution. The synchronous growth of funding with regional wealth levels suggests that industry prioritize market potential and return on investment when allocating resources.
+2. **Exacerbation of Resource Concentration**: High-income states not only possess richer public resources but also receive a disproportionate share of industrial funding. This "icing on the cake" model may further widen the healthcare resource gap between states.
+3. **Geographic Roots of Inequality**: If the geographic distribution of industry influence remains tethered to wealth, physicians and patients in low-income areas may face a relative disadvantage in accessing medical innovation and professional educational resources.
+
+
+## 4. Geographic Distribution and Spatial Imbalance
+
+While the wealth alignment analysis establishes a statistical link between income and funding, a **geographic visualization** is essential to identify specific "hotspots" of industry influence across the United States. This map normalizes total payments by the number of households in each state, providing a measure of **payment intensity** that allows for direct cross-state comparisons.
 ```{python}
 #| label: national-map
 from vega_datasets import data
@@ -165,3 +297,112 @@ map_chart = alt.Chart(states_topo).mark_geoshape().encode(
 map_chart.display()
 ```
 
+### Data Findings & Logical Decomposition
+
+* **Regional Concentration and "Hotspots"**
+* The choropleth map reveals that industry payments are not uniformly distributed but are heavily clustered in specific Northeastern and Mid-Atlantic states.
+* **Pennsylvania** and **Massachusetts** emerge as the most prominent outliers, exhibiting the highest payment density per household (exceeding $80 per household in some areas). This concentration likely reflects the presence of major pharmaceutical hubs and elite academic medical centers in these regions.
+
+
+* **The Geographic "Tethering" Effect**
+* The map confirms that high-intensity zones are largely contiguous with the high-income states identified in the previous scatter plot.
+* Conversely, much of the **Midwest** and **Mountain West** display significantly lower payment densities (often below $20 per household). This spatial disparity suggests that industry engagement follows established economic and institutional infrastructures rather than being driven by a decentralized healthcare need.
+
+
+* **Implications of Spatial Clustering**
+* The extreme density in a few states indicates that a disproportionate share of industry-funded professional education, innovation, and consulting is sequestered in specific geographic corridors. This creates a "resource island" effect where clinicians in a handful of states have vastly more frequent interactions with industry resources than those in the rest of the country.
+
+
+```python
+#| label: geographic-map-analysis
+#| echo: false
+
+```
+
+### Core Conclusion: Spatial Inequity in Industry Engagement
+
+The geographic analysis provides the final piece of evidence for the project's central thesis:
+
+1. **Geographic Consolidation**: Industry influence is highly localized. The concentration of funds in specific states suggests that the "mitigating effect" of transparency under the Sunshine Act faces a geographic challenge: influence is concentrated where clinical and economic power is already greatest.
+2. **Access Disparities**: Clinicians and patients in low-density states may have less exposure to the newest (industry-funded) medical developments, while those in high-density states face much higher risks of systemic conflicts of interest.
+3. **Policy Need for Targeted Oversight**: Federal oversight may need to be supplemented by state-level transparency initiatives in "high-intensity" zones to address the unique pressures created by such extreme spatial concentration.
+
+## 5. Evidence of Extreme Financial Concentration
+
+In addition to the structural and geographic imbalances previously discussed, a longitudinal assessment of the recipient pool reveals a profound level of economic inequality. This section utilizes a **Concentration Curve** (similar to a Lorenz Curve) to demonstrate the disproportionate share of industry funding held by a minute fraction of medical professionals.
+
+```{python}
+#| label: concentration-analysis
+con_df = pd.read_csv("data/derived-data/concentration_data.csv")
+
+# Key takeaway: What percentage of the money did the top 1% of people take?
+top_1_percent_val = con_df[con_df['cum_percent_people'] <= 0.01]['cum_percent_money'].max()
+
+# Drawing a portion of the Lorenz Curve
+chart = alt.Chart(con_df.head(5000)).mark_line(color='#e63946', strokeWidth=3).encode(
+    x=alt.X('cum_percent_people:Q', title='Cumulative Share of Recipients', axis=alt.Axis(format='%')),
+    y=alt.Y('cum_percent_money:Q', title='Cumulative Share of Total Payments', axis=alt.Axis(format='%')),
+    tooltip=['cum_percent_people', 'cum_percent_money']
+).properties(
+    title=f"Extreme Concentration: Top 1% Recipients capture approx. {top_1_percent_val:.1%} of Total Funds",
+    width=600,
+    height=400
+)
+
+# Add a 45-degree line of absolute fairness for comparison
+line = alt.Chart(pd.DataFrame({'x': [0, 1], 'y': [0, 1]})).mark_line(strokeDash=[5,5], color='gray').encode(
+    x='x', y='y'
+)
+
+(line + chart).display()
+```
+
+### Data Findings & Logical Decomposition
+
+* **The "Hyper-Concentrated" Elite**:
+* The visualization indicates that the **top 1% of recipients** capture approximately **66.0% of the total industry funds**. This reveals that the vast majority of the multibillion-dollar pool is not distributed broadly for routine medical education or small-scale consulting but is instead sequestered by a tiny financial elite.
+* This "Pareto-style" distribution suggests that for most physicians, industry interaction is high-frequency but low-value (e.g., meals), while for the top 1%, it is a primary economic driver involving millions of dollars in individual payments.
+
+
+* **Departure from Equality**:
+* The dashed diagonal line represents a hypothetical scenario of perfect equality (where 1% of people get 1% of the money).
+* The sharp, nearly vertical trajectory of the red line at the start of the x-axis illustrates the extreme "winner-take-all" nature of industry-physician financial relationships in 2023.
+
+
+
+```python
+#| label: concentration-analysis
+#| echo: false
+
+```
+
+### Core Conclusion: The Monopoly of Influence
+
+The concentration analysis provides the final and perhaps most compelling evidence regarding healthcare inequality:
+
+1. **Systemic Financial Oligarchy**: A small number of high-profile physicians—often those involved in major intellectual property or key opinion leadership (KOL) roles—wield disproportionate economic influence over the medical field.
+2. **Dilution of Transparency Intent**: While the Sunshine Act makes all payments transparent, the sheer volume of data can obscure the fact that the "average" physician's financial tie is negligible compared to the massive economic interests concentrated at the top 1%.
+3. **Policy Implication for Equity**: Oversight efforts should not be equally distributed; instead, policy focus and conflict-of-interest auditing should be prioritized for this top 1% of recipients who control over two-thirds of the total funding, as their decisions have the highest potential for systemic impact.
+
+Policy Implications
+The findings of this study move beyond simple transparency, suggesting that the current oversight framework under the Sunshine Act may need to evolve to address structural and geographic inequalities.
+
+1. Targeted Audit Strategies
+The discovery of the "1% Rule"—where 66% of total funding is captured by a minute fraction of recipients—indicates that conflict-of-interest (COI) risks are not uniformly distributed.
+
+Recommendation: Regulators should adopt a risk-based auditing approach. Instead of broad, descriptive oversight, resources should be prioritized for the top 1% of recipients, particularly those involved in high-value Royalty and Licensing agreements, as their financial ties have the highest potential for systemic influence on clinical guidelines.
+
+2. Specialty-Specific Transparency Frameworks
+Our analysis reveals that industry influence operates differently across clinical ecosystems (e.g., high-stakes device bonding in Orthopaedics vs. high-frequency marketing in Internal Medicine).
+
+Recommendation: Disclosure requirements should be tailored to the nature of the specialty. For device-intensive fields, more granular reporting on the relationship between intellectual property payments and clinical adoption of specific medical devices is necessary.
+
+3. Addressing "Resource Deserts" and Geographic Equity
+The Wealth Alignment effect demonstrates that industry capital systematically flows to affluent regions (such as PA and MA), potentially leaving low-income populations in "resource deserts" with less access to medical innovation and industry-sponsored clinical education.
+
+Recommendation: Public health agencies should consider incentives to encourage industry-physician collaborations in underserved or low-income regions. Furthermore, state-level transparency initiatives should be intensified in "high-intensity" zones to monitor the concentration of industry influence in wealthy medical hubs.
+
+4. Enhancing Public Data Utility
+The sheer volume of CMS data can act as a "barrier by complexity."
+
+Recommendation: To fulfill the Sunshine Act’s original promise of accountability, the government should invest in interactive, user-facing analytical tools—similar to the dashboard developed in this project. Providing patients and researchers with the ability to visualize structural patterns (rather than just viewing raw lists of names) is essential for effective public scrutiny.
