@@ -1,0 +1,71 @@
+---
+title: "Plot 3: Wealth Alignment Scatter Plot"
+format: html
+execute:
+  echo: true
+---
+```{python}
+import pandas as pd
+import altair as alt
+
+df_cms = pd.read_csv("data/derived-data/cms_payments_clean.csv")
+df_acs = pd.read_csv("data/derived-data/acs_state_clean.csv")
+
+state_payments = (
+    df_cms.groupby('state')['payment_amount']
+    .sum()
+    .reset_index()
+)
+
+df_state = pd.merge(
+    state_payments,
+    df_acs,
+    left_on='state',
+    right_on='state_abbr',
+    how='inner'
+)
+df_state['payment_per_household'] = df_state['payment_amount'] / df_state['total_households']
+
+scatter = alt.Chart(df_state).mark_circle(size=100, opacity=0.7).encode(
+    x=alt.X('median_income:Q',
+            title='State Median Household Income (USD)',
+            scale=alt.Scale(zero=False)),
+    y=alt.Y('payment_per_household:Q',
+            title='Industry Payment per Household (USD)'),
+    color=alt.value('steelblue'),
+    tooltip=[
+        'state_name',
+        alt.Tooltip('median_income:Q', format='$,.0f'),
+        alt.Tooltip('payment_per_household:Q', format='$.2f')
+    ]
+).properties(
+    title='State Median Household Income vs. Industry Payment Intensity (2023)',
+    width=600,
+    height=400
+)
+
+regression = scatter.transform_regression(
+    'median_income', 'payment_per_household'
+).mark_line(color='red')
+
+outliers = df_state[df_state['state'].isin(['PA', 'MA'])]
+
+labels = alt.Chart(outliers).mark_text(
+    align='left',
+    dx=6,
+    dy=-4,
+    fontSize=11,
+    color='#d9534f'
+).encode(
+    x='median_income:Q',
+    y='payment_per_household:Q',
+    text='state:N'
+)
+
+final_plot = scatter + regression + labels
+final_plot.save("data/derived-data/plot4_wealth_alignment.png", scale_factor=2)
+final_plot.display()
+```
+
+### interpretation
+The scatter plot shows that states with higher median household income tend to receive more industry funding per household. Pennsylvania and Massachusetts stand out as outliers, sitting well above the regression line. These states host major medical research institutions. These organizations hold lucrative patents. As a result, they attract massive royalty payments. This pattern highlights a stark reality. Industry money follows research infrastructure and regional wealth. It does not follow patient healthcare needs.

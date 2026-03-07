@@ -1,4 +1,14 @@
+# Ignore Mac system files
+.DS_Store
+
+# Ignore all large data files
 data/raw-data/
-.DS_Store
-.DS_Store
-*/.DS_Store
+data/derived-data/*.csv
+data/derived-data/*.parquet
+
+# Keep the folder structure but ignore the contents
+!data/derived-data/.gitkeep
+
+# Ignore python cache
+__pycache__/
+*.pyc

@@ -1,0 +1,87 @@
+---
+title: "Plot 1: Industry Payments by Specialty Group"
+format: html
+execute:
+  echo: true
+---
+```{python}
+#| label: plot1
+import pandas as pd
+import numpy as np
+import altair as alt
+
+df_cms = pd.read_csv("data/derived-data/cms_payments_clean.csv")
+
+# responding to professor's question:
+# 1. exploring the 'unknown' group
+unknown_entities = df_cms[df_cms['specialty_clean'] == 'Unknown']['recipient_type'].value_counts()
+print(unknown_entities)
+# The 'Unknown' category primarily consists of Teaching Hospitals, which do not have individual medical specialties listed in the CMS database.
+
+# 2. Group specialties into high-level categories.
+# Unmatched specialties retain their original name (no "Other" catch-all).
+conditions = [
+    df_cms['specialty_clean'] == 'Unknown',
+    df_cms['specialty_clean'].str.contains('Orthopaedic|Orthopedic', case=False, na=False) &
+        ~df_cms['specialty_clean'].str.contains('Orthodontic', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Cardio|Heart', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Oncology|Hematolog', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Neurolog|Neurosurg|Neuroradio', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Psychiatr|Mental Health', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Internal Medicine|Family Medicine|Family Health|General Practice|Primary Care|Adult Medicine', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Nurse|Physician Assistant', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Dermatolog', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Surgery|Surgeon', case=False, na=False),
+]
+
+choices = [
+    'Unknown (Researchers & Institutions)',
+    'Orthopedics',
+    'Cardiology',
+    'Oncology & Hematology',
+    'Neurology & Neurosurgery',
+    'Psychiatry & Mental Health',
+    'Internal Med & Primary Care',
+    'Advanced Practice Providers',
+    'Dermatology',
+    'General & Other Surgery',
+]
+
+# Unmatched rows keep their original specialty_clean name
+df_cms['specialty_grouped'] = np.select(conditions, choices, default=df_cms['specialty_clean'])
+
+# Aggregate and take top 10
+spec_totals = (
+    df_cms.groupby('specialty_grouped')['payment_amount']
+    .sum()
+    .reset_index()
+    .sort_values('payment_amount', ascending=False)
+    .head(10)
+)
+
+spec_chart = alt.Chart(spec_totals).mark_bar().encode(
+    x=alt.X('payment_amount:Q', title='Total Payments (USD)', axis=alt.Axis(format='$.2s')),
+    y=alt.Y('specialty_grouped:N', sort='-x', title='Specialty Group'),
+    color=alt.condition(
+        alt.datum.specialty_grouped == 'Unknown (Researchers & Institutions)',
+        alt.value('#d9534f'),
+        alt.value('#2166ac')
+    ),
+    tooltip=[
+        alt.Tooltip('specialty_grouped:N', title='Specialty Group'),
+        alt.Tooltip('payment_amount:Q', format='$,.0f', title='Total Payments')
+    ]
+).properties(
+    title='Top 10 Specialty Groups by Total Industry Payments (2023)',
+    width=600,
+    height=350
+)
+
+spec_chart.display()
+```
+
+### Interpretation
+The "Unknown" category receives the most funding. It totals approximately $800 million. This reflects a reporting structure, as CMS does not assign specific medical specialties to these corporate entities.
+
+Orthopedics ranks first among identified clinical fields. It captures over $500 million. This total is more than double the next highest specialty. 
+Among clinical specialties, Orthopedics ranks first with over $500 million. This total is more than double the next highest specialty. Internal Medicine follows at about $237 million, driven by high-frequency, low-value payments such as meals rather than large device or royalty agreements.

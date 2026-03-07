@@ -1,0 +1,96 @@
+---
+title: "Plot 5: Payment Concentration (Lorenz Curve)"
+format: html
+execute:
+  echo: true
+---
+```{python}
+import altair as alt
+import pandas as pd
+alt.data_transformers.disable_max_rows()
+
+# All recipients
+recipient_totals = (
+    df_cms.groupby(['recipient_id', 'recipient_type'])['payment_amount']
+    .sum()
+    .sort_values(ascending=True)
+    .reset_index()
+)
+
+recipient_totals['cum_percent_money'] = (
+    recipient_totals['payment_amount'].cumsum() / recipient_totals['payment_amount'].sum()
+)
+recipient_totals['cum_percent_people'] = (
+    (recipient_totals.index + 1) / len(recipient_totals)
+)
+
+# Physicians only (exclude Teaching Hospitals)
+physician_totals = (
+    df_cms[df_cms['recipient_type'] != 'Covered Recipient Teaching Hospital']
+    .groupby('recipient_id')['payment_amount']
+    .sum()
+    .sort_values(ascending=True)
+    .reset_index()
+)
+
+physician_totals['cum_percent_money'] = (
+    physician_totals['payment_amount'].cumsum() / physician_totals['payment_amount'].sum()
+)
+physician_totals['cum_percent_people'] = (
+    (physician_totals.index + 1) / len(physician_totals)
+)
+
+# Top 1% values
+top_1_all = 1.0 - recipient_totals[
+    recipient_totals['cum_percent_people'] <= 0.99
+]['cum_percent_money'].max()
+
+top_1_physicians = 1.0 - physician_totals[
+    physician_totals['cum_percent_people'] <= 0.99
+]['cum_percent_money'].max()
+
+# Sample for plotting
+all_sample = (
+    recipient_totals
+    .sample(n=min(5000, len(recipient_totals)), random_state=42)
+    .sort_values('cum_percent_people')
+    .assign(group='All Recipients')
+)
+
+physician_sample = (
+    physician_totals
+    .sample(n=min(5000, len(physician_totals)), random_state=42)
+    .sort_values('cum_percent_people')
+    .assign(group='Physicians Only')
+)
+
+combined = pd.concat([all_sample, physician_sample])
+
+# Chart
+curve = alt.Chart(combined).mark_line(strokeWidth=2).encode(
+    x=alt.X('cum_percent_people:Q', title='Cumulative Share of Recipients', axis=alt.Axis(format='%')),
+    y=alt.Y('cum_percent_money:Q', title='Cumulative Share of Total Payments', axis=alt.Axis(format='%')),
+    color=alt.Color('group:N', 
+                    title='Group',
+                    scale=alt.Scale(
+                        domain=['All Recipients', 'Physicians Only'],
+                        range=['#e63946', '#2166ac']
+                    )),
+    tooltip=['group', 'cum_percent_people', 'cum_percent_money']
+).properties(
+    title=f'Payment Concentration: All Recipients ({top_1_all:.1%}) vs Physicians Only ({top_1_physicians:.1%})',
+    width=500,
+    height=280
+)
+
+equality_line = alt.Chart(pd.DataFrame({'x': [0, 1], 'y': [0, 1]})).mark_line(
+    strokeDash=[5, 5], color='gray'
+).encode(x='x', y='y')
+
+final_plot = equality_line + curve
+final_plot.save("data/derived-data/plot5_lorenz_curve.png", scale_factor=2)
+final_plot.display()
+```
+
+### interpretation:
+The plot reveals a striking fact. Excluding teaching hospitals changes almost nothing. The top 1% of individual physicians still capture 66.0% of these payments. This proves a crucial point. The extreme concentration is not a corporate outlier effect. Industry funds are not distributed broadly. They do not support routine medical education. They do not fund small-scale consulting. Instead, a tiny elite captures the vast majority of this multibillion-dollar pool.

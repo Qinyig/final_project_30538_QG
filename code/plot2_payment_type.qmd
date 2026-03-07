@@ -1,0 +1,39 @@
+---
+title: "Plot 2: Distribution of Payment Types"
+format: html
+execute:
+  echo: true
+---
+```{python}
+import pandas as pd
+import altair as alt
+
+df_cms = pd.read_csv("data/derived-data/cms_payments_clean.csv")
+
+type_dist = (
+    df_cms.groupby('payment_type_clean')['payment_amount']
+    .sum()
+    .reset_index()
+    .sort_values('payment_amount', ascending=False)
+)
+
+type_chart = alt.Chart(type_dist).mark_bar().encode(
+    x=alt.X('payment_amount:Q', title='Total Payments (USD)', axis=alt.Axis(format='$.2s')),
+    y=alt.Y('payment_type_clean:N', sort='-x', title='Payment Type'),
+    color=alt.value('#2166ac'),
+    tooltip=[
+        alt.Tooltip('payment_type_clean:N', title='Category'),
+        alt.Tooltip('payment_amount:Q', format='$,.0f', title='Total Amount')
+    ]
+).properties(
+    title='Distribution of Industry Payment Types (2023)',
+    width=500,
+    height=300
+)
+
+type_chart.save("data/derived-data/plot2_payment_type.png", scale_factor=2)
+type_chart.display()
+```
+
+### Interpretation
+Royalty and License fees total approximately $1.19B, making them the largest payment category by a wide margin. Intellectual property therefore drives the main financial link between industry and medicine. Day-to-day marketing is not the primary factor. Non-consulting professional services rank second in total value. In contrast, Food and Beverage payments have a very small dollar value. However, these payments happen constantly. They represent routine, low-cost contact with a massive number of doctors.

@@ -1,0 +1,165 @@
+---
+title: "CMS Open Payments - Data Preprocessing"
+author: "Quinn Gan"
+date: 2026-02-28
+format: 
+  html:
+    code-fold: true
+execute:
+  echo: true
+---
+
+## Data Preprocessing
+
+This file downloads, cleans, and standardizes the raw CMS Open Payments and ACS Census data. Outputs are saved to `data/derived-data/` for use in `Final_project.qmd`.
+```{python}
+#| label: setup
+import os
+import requests
+import pandas as pd
+
+# Path configuration
+RAW_DATA_DIR = "data/raw-data"
+DERIVED_DATA_DIR = "data/derived-data"
+CMS_RAW_PATH = os.path.join(RAW_DATA_DIR, "open_payments_2023_national.csv")
+ACS_RAW_PATH = os.path.join(RAW_DATA_DIR, "ACSDP1Y2023.DP03-2026-02-27T224607.csv")
+
+os.makedirs(RAW_DATA_DIR, exist_ok=True)
+os.makedirs(DERIVED_DATA_DIR, exist_ok=True)
+```
+
+## Step 1: Load or Fetch CMS Data
+```{python}
+#| label: load-cms
+if os.path.exists(CMS_RAW_PATH):
+    print("Loading CMS data from cache...")
+    payments_df = pd.read_csv(CMS_RAW_PATH)
+else:
+    print("Fetching CMS data from API...")
+    url = "https://openpaymentsdata.cms.gov/api/1/metastore/schemas/dataset/items/fb3a65aa-c901-4a38-a813-b04b00dfa2a9"
+    r = requests.get(url)
+    r.raise_for_status()
+    csv_url = r.json()["distribution"][0]["downloadURL"]
+
+    usecols = [
+        "Covered_Recipient_Profile_ID", "Covered_Recipient_Specialty_1",
+        "Total_Amount_of_Payment_USDollars", "Date_of_Payment",
+        "Nature_of_Payment_or_Transfer_of_Value", "Recipient_State", "Covered_Recipient_Type"
+    ]
+
+    print("Downloading chunks...")
+    chunks = pd.read_csv(csv_url, usecols=usecols, chunksize=200_000, low_memory=False)
+    payments_df = pd.concat(chunks, ignore_index=True)
+    payments_df.to_csv(CMS_RAW_PATH, index=False)
+
+print(f"CMS data loaded: {len(payments_df):,} rows")
+```
+
+## Step 2: Clean CMS Data
+```{python}
+#| label: clean-cms
+# Filter out zero/negative payments
+payments_df = payments_df[payments_df["Total_Amount_of_Payment_USDollars"] > 0].copy()
+
+# Standardize column names
+payments_df.columns = payments_df.columns.str.lower()
+payments_df = payments_df.rename(columns={
+    "covered_recipient_profile_id": "recipient_id",
+    "total_amount_of_payment_usdollars": "payment_amount",
+    "recipient_state": "state",
+    "covered_recipient_specialty_1": "specialty",
+    "nature_of_payment_or_transfer_of_value": "payment_type",
+    "covered_recipient_type": "recipient_type"
+})
+
+# Clean specialty names
+payments_df["specialty_clean"] = (
+    payments_df["specialty"]
+    .str.split("|")
+    .str[-1]
+    .str.strip()
+    .fillna("Unknown")
+)
+
+# Standardize payment type labels
+nature_map = {
+    "Compensation for services other than consulting, including serving as faculty or as a speaker at a venue other than a continuing education program": "Non-consulting professional services",
+    "Consulting Fee":                          "Consulting",
+    "Food and Beverage":                       "Food & Beverage",
+    "Travel and Lodging":                      "Travel & Lodging",
+    "Royalty or License":                      "Royalty / License",
+    "Honoraria":                               "Honoraria",
+    "Education":                               "Education",
+    "Grant":                                   "Grant",
+    "Acquisitions":                            "Acquisitions",
+    "Entertainment":                           "Entertainment",
+    "Long term medical supply or device loan": "Device / Supply Loan"
+}
+payments_df["payment_type_clean"] = (
+    payments_df["payment_type"]
+    .map(nature_map)
+    .fillna("Other")
+)
+payments_df["state"] = payments_df["state"].fillna("Unknown")
+
+print("CMS cleaning complete.")
+print(payments_df[["recipient_id", "recipient_type", "state", "specialty_clean", "payment_type_clean", "payment_amount"]].head())
+```
+
+## Step 3: Load and Clean ACS Data
+```{python}
+#| label: clean-acs
+if not os.path.exists(ACS_RAW_PATH):
+    raise FileNotFoundError(f"Missing ACS file at {ACS_RAW_PATH}. Please ensure it is in data/raw-data/")
+
+df_acs_raw = pd.read_csv(ACS_RAW_PATH).set_index('Label (Grouping)')
+
+estimate_cols = [c for c in df_acs_raw.columns if "!!Estimate" in c]
+df_estimates = df_acs_raw[estimate_cols].T
+
+income_lbl = [idx for idx in df_acs_raw.index if "Median household income (dollars)" in idx][0]
+hh_lbl = [idx for idx in df_acs_raw.index if "Total households" in idx][0]
+
+df_acs = df_estimates[[income_lbl, hh_lbl]].copy()
+df_acs.columns = ['median_income', 'total_households']
+
+for col in df_acs.columns:
+    df_acs[col] = pd.to_numeric(df_acs[col].astype(str).str.replace(',', ''), errors='coerce')
+
+df_acs.index = df_acs.index.str.replace("!!Estimate", "")
+df_acs = df_acs.reset_index().rename(columns={'index': 'state_name'})
+
+state_to_abbr = {
+    "Alabama": "AL", "Alaska": "AK", "Arizona": "AZ", "Arkansas": "AR", "California": "CA",
+    "Colorado": "CO", "Connecticut": "CT", "Delaware": "DE", "Florida": "FL", "Georgia": "GA",
+    "Hawaii": "HI", "Idaho": "ID", "Illinois": "IL", "Indiana": "IN", "Iowa": "IA",
+    "Kansas": "KS", "Kentucky": "KY", "Louisiana": "LA", "Maine": "ME", "Maryland": "MD",
+    "Massachusetts": "MA", "Michigan": "MI", "Minnesota": "MN", "Mississippi": "MS", "Missouri": "MO",
+    "Montana": "MT", "Nebraska": "NE", "Nevada": "NV", "New Hampshire": "NH", "New Jersey": "NJ",
+    "New Mexico": "NM", "New York": "NY", "North Carolina": "NC", "North Dakota": "ND", "Ohio": "OH",
+    "Oklahoma": "OK", "Oregon": "OR", "Pennsylvania": "PA", "Rhode Island": "RI", "South Carolina": "SC",
+    "South Dakota": "SD", "Tennessee": "TN", "Texas": "TX", "Utah": "UT", "Vermont": "VT",
+    "Virginia": "VA", "Washington": "WA", "West Virginia": "WV", "Wisconsin": "WI", "Wyoming": "WY",
+    "District of Columbia": "DC"
+}
+df_acs['state_abbr'] = df_acs['state_name'].map(state_to_abbr)
+
+print("ACS cleaning complete.")
+print(df_acs.head())
+```
+
+## Step 4: Save Outputs
+```{python}
+#| label: save-outputs
+# Output 1: Row-level cleaned CMS payments
+payments_df[['recipient_id', 'recipient_type', 'state', 'specialty_clean', 'payment_type_clean', 'payment_amount']].to_csv(
+    "data/derived-data/cms_payments_clean.csv", index=False
+)
+
+# Output 2: Cleaned ACS state-level indicators
+df_acs.to_csv("data/derived-data/acs_state_clean.csv", index=False)
+
+print("Outputs saved to data/derived-data/:")
+print("  - cms_payments_clean.csv")
+print("  - acs_state_clean.csv")
+```
