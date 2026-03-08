@@ -4,11 +4,12 @@ channels:
   - defaults
 dependencies:
   - python=3.11
-  - pandas
-  - numpy
-  - altair>=5.0.0
-  - streamlit
-  - vega_datasets
-  - gdown
-  - requests
   - pip
+  - pip:
+    - pandas
+    - numpy
+    - altair>=5.0.0
+    - streamlit
+    - vega_datasets
+    - gdown
+    - requests
