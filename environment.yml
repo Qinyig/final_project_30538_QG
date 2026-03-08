@@ -1,9 +1,14 @@
-name: fire_analysis
+name: cms_analysis
 channels:
   - conda-forge
+  - defaults
 dependencies:
   - python=3.11
   - pandas
-  - geopandas
-  - matplotlib
-  - shapely
+  - numpy
+  - altair>=5.0.0
+  - streamlit
+  - vega_datasets
+  - gdown
+  - requests
+  - pip
