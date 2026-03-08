@@ -31,7 +31,6 @@ def load_data():
         'payment_type_clean': 'category',
         'payment_amount': 'float32'
     })
-    df_cms = pd.read_csv(cms_path)
     df_acs = pd.read_csv("data/derived-data/acs_state_clean.csv")
 
     # Compute specialty_grouped
