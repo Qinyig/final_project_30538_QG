@@ -3,3 +3,4 @@ pandas
 altair
 numpy
 vega_datasets
+gdown
