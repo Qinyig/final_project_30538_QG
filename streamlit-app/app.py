@@ -11,7 +11,16 @@ st.set_page_config(layout="wide", page_title="Healthcare Industry Payment Dashbo
 # --------------------------
 @st.cache_data
 def load_data():
-    df_cms = pd.read_csv("data/derived-data/cms_payments_clean.csv")
+    import gdown
+    import os
+    cms_path = "/tmp/cms_payments_clean.csv"
+    if not os.path.exists(cms_path):
+        gdown.download(
+            f"https://drive.google.com/uc?id=1h5VC-j6Q1SwLTChTP7PBJtrd6WsbHKo9",
+            cms_path,
+            quiet=False
+        )
+    df_cms = pd.read_csv(cms_path)
     df_acs = pd.read_csv("data/derived-data/acs_state_clean.csv")
 
     # Compute specialty_grouped
