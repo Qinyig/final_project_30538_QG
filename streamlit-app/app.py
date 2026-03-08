@@ -20,6 +20,17 @@ def load_data():
             cms_path,
             quiet=False
         )
+    df_cms = pd.read_csv(cms_path, usecols=[
+        'recipient_id', 'recipient_type', 'state',
+        'specialty_clean', 'payment_type_clean', 'payment_amount'
+    ], dtype={
+        'recipient_id': 'str',
+        'recipient_type': 'category',
+        'state': 'category',
+        'specialty_clean': 'category',
+        'payment_type_clean': 'category',
+        'payment_amount': 'float32'
+    })
     df_cms = pd.read_csv(cms_path)
     df_acs = pd.read_csv("data/derived-data/acs_state_clean.csv")
 
