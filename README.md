@@ -19,7 +19,7 @@ This project analyzes the 2023 CMS Open Payments dataset to examine how pharmace
 
 ## Streamlit Dashboard
 
-[Insert Streamlit Community Cloud URL here]
+[https://qgdashboard.streamlit.app/]
 
 ---
 
