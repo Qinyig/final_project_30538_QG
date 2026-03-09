@@ -3,266 +3,180 @@ title: "CMS Open Payments Analysis"
 subtitle: "30538 Final Project"
 author: "Quinn Gan"
 date: today
-format: 
+format:
   html:
-    code-fold: true
+    toc: true
+    toc-depth: 2
+    embed-resources: true
+  pdf:
+    toc: false
+    number-sections: false
+    fig-pos: 'H'
+    default-image-extension: png
+    include-in-header:
+      text: |
+        \usepackage{fvextra}
+        \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+geometry: "left=0.8in,right=0.8in,top=0.7in,bottom=0.7in"
+fontsize: 11pt
 execute:
-  echo: true
+  echo: false
+  warning: false
+  message: false
 ---
 
+## Group Information
 
-# Money in Medicine: Structural and Geographic Concentration of Industry Payments (2023)
+- **Group Member:** Quinn Gan
+- **Lecture Section:** Mon/Wed 10:00 am - 11:50 am, Section 2
+- **GitHub Username:** Qinyig
+- **Repository:** Qinyig/final_project_30538_QG
 
-## Introduction
+## 1. Research Motivation & Question
 
-The Physician Payment Sunshine Act, enacted as part of the Affordable Care Act, was designed to increase transparency in financial relationships between the healthcare industry and medical providers. Through the CMS Open Payments program, pharmaceutical and medical device manufacturers are required to publicly report payments made to physicians and teaching hospitals. This policy intervention rests on the premise that transparency can mitigate conflicts of interest and promote accountability in healthcare decision-making. 
+The Physician Payment Sunshine Act is a key part of the Affordable Care Act. This law requires medical manufacturers to report all payments made to doctors and teaching hospitals. These records are managed through the CMS Open Payments program. The policy assumes that transparency reduces conflicts of interest. Ideally, public reporting ensures that clinical decisions remain objective and accountable.
 
-However, transparency alone does not answer deeper structural questions. While the data reveal who receives payments and in what amounts, they do not immediately clarify how industry funding is distributed across clinical specialties, payment types, or geographic regions. Understanding these distributional patterns is essential for evaluating whether industry influence is diffuse and routine, or concentrated and potentially policy-relevant. 
+However, transparency by itself is not enough. Raw data does not explain how industry funding is actually distributed across the system. This project investigates the structural patterns within those payments. I ask a central question: Are industry payments concentrated in specific specialties, payment types, or geographic regions? 
 
-This project moves beyond descriptive transparency to examine the structural and geographic concentration of pharmaceutical industry payments in 2023. By integrating CMS Open Payments data with socio-economic indicators from the American Community Survey (ACS), this analysis explores whether industry payments are aligned with population characteristics or clustered in ways that may have implications for equity and conflict-of-interest oversight. 
+## 2. Data & Approach
 
-## Background
+This project integrates two datasets: CMS Open Payments (2023) and American Community Survey (ACS, 2023).
 
-Industry–physician financial relationships take many forms, ranging from small-value food and beverage payments to large royalty or licensing agreements tied to intellectual property. These relationships can support medical innovation, research collaboration, and product development. At the same time, they may raise concerns about potential conflicts of interest, especially when payments are highly concentrated in specific specialties or regions. 
+All raw data cleaning and standardization is handled in `preprocessing.py`. All merging, reshaping, and aggregation is performed in this document. The key metric is **payment intensity** (total payments per household), which allows fair cross-state comparisons regardless of population size.
 
-Previous discussions surrounding Open Payments data often focus on total dollar amounts or individual high-profile cases. However, aggregate totals can obscure important structural patterns. For example:
+Data Processing for Interactivity: The raw CMS dataset contains over 1.2 million records. To ensure the interactive dashboard remains responsive and stays within the hosting platform's memory limits, I limited the dashboard's active dataset to the first 800,000 records. This sample size remains large enough to maintain the statistical integrity of the geographic and specialty-based trends discussed in this report.
 
-* **Specialty Disparity**: Are payments evenly distributed across medical specialties, or concentrated in device-intensive or procedure-heavy fields? 
-* **Structural Origin**: Do high-value payments stem primarily from routine marketing activities or from intellectual property arrangements (e.g., Royalties)? 
-* **Economic Clustering**: Are industry payments geographically aligned with population size and need, or disproportionately concentrated in certain economic environments? 
+**Data Limitations:** The dataset captures payment amounts but not clinical outcomes, so I cannot establish causal links between payments and physician behavior. The "Unknown" specialty category (~$800M) reflects a CMS reporting gap for non-practicing researchers and institutions rather than true missing data.
 
-Answering these questions requires combining disaggregated federal payment records with demographic and economic data. By linking CMS General Payments data with ACS state-level income and household indicators, this project constructs normalized measures of payment intensity that allow for meaningful cross-state comparisons. 
+## 3. Static Visualizations
 
-## Research Questions
+**Industry Payments by Specialty Group：**
+The "Unknown" category receives the highest funding, totaling approximately $800 million. This reflects the CMS reporting structure. CMS does not assign specific medical specialties to teaching hospitals or research institutions. Among identified clinical fields, Orthopedics ranks first with over $500 million. This amount is more than double any other specialty. Internal Medicine follows at roughly $237 million. While Orthopedics is driven by large device agreements, Internal Medicine payments consist mostly of high-frequency, low-value items like meals.
 
-This project addresses three primary research questions to evaluate the landscape of industry influence in 2023:
-
-### 1. Structural Concentration Across Specialties and Payment Types
-
-How are pharmaceutical industry payments distributed across medical specialties and categories of financial transfers?
-
-* Which specialties receive the highest total industry payments? 
-* Are total payment dollars concentrated in a small number of high-value payment categories (e.g., royalties and licensing) relative to routine transaction types? 
-* This question examines whether industry influence is structurally concentrated within particular clinical and financial ecosystems. 
-
-
-### 2. Geographic Distribution and Payment Intensity
-
-When normalized by population size or number of households, how do industry payments vary across states?
-
-* Which states exhibit the highest payment intensity per household? 
-* Do spatial clusters of industry funding emerge beyond what would be expected from population differences alone? 
-
-
-### 3. Socio-economic Alignment
-
-Is there a relationship between regional economic conditions and industry payment intensity?
-
-* Is median household income statistically associated with industry payment per household? 
-* Do higher-income states receive systematically greater industry funding? 
-* This question explores whether industry financial relationships align with wealth patterns, which may have implications for how industry influence is distributed across different economic environments. 
-
-
-## 1. Distribution of Healthcare Payments by Specialty
-
-To begin, I examine how industry payments are distributed across medical specialties in 2023. If financial relationships were evenly distributed, we would expect funding to be relatively similar across specialties. However, this figure reveals a highly concentrated pattern.
+**Distribution of Payment Types：**
+Royalty and License fees total approximately $1.19B, making them the largest payment category by a wide margin. Intellectual property therefore drives the main financial link between industry and medicine. Day-to-day marketing is not the primary factor. Non-consulting professional services rank second in total value. In contrast, Food and Beverage payments have a very small dollar value. However, these payments happen constantly. They represent routine, low-cost contact with a massive number of doctors.
 
 ```{python}
-#| label: specialty-analysis
+#| label: plot1-2
+#| echo: false
 import pandas as pd
+import numpy as np
 import altair as alt
+alt.data_transformers.enable("vegafusion")
 
-# Load the detailed payment dataset
-df_details = pd.read_csv("data/derived-data/cms_payments_details.csv")
+df_cms = pd.read_csv("data/derived-data/cms_payments_clean.csv")
 
-# Aggregate global totals per specialty for the ranking
-spec_rank = df_details.groupby('specialty_clean')['payment_amount'].sum().nlargest(10).reset_index()
+# Group specialties into high-level categories.
+# Unmatched specialties retain their original name (no "Other" catch-all).
+conditions = [
+    df_cms['specialty_clean'] == 'Unknown',
+    df_cms['specialty_clean'].str.contains('Orthopaedic|Orthopedic', case=False, na=False) &
+        ~df_cms['specialty_clean'].str.contains('Orthodontic', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Cardio|Heart', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Oncology|Hematolog', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Neurolog|Neurosurg|Neuroradio', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Psychiatr|Mental Health', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Internal Medicine|Family Medicine|Family Health|General Practice|Primary Care|Adult Medicine', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Nurse|Physician Assistant', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Dermatolog', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Surgery|Surgeon', case=False, na=False),
+]
 
-# Visualization: Horizontal Bar Chart for Rankings
-spec_chart = alt.Chart(spec_rank).mark_bar().encode(
-    x=alt.X('payment_amount:Q', title='Total Industry Payments (USD)', axis=alt.Axis(format='$.2s')),
-    y=alt.Y('specialty_clean:N', sort='-x', title='Medical Specialty'),
-    color=alt.Color('payment_amount:Q', scale=alt.Scale(scheme='blues'), legend=None),
-    tooltip=['specialty_clean', alt.Tooltip('payment_amount:Q', format='$,.0f')]
-).properties(
-    title='Top 10 Medical Specialties by Industry Funding Intensity (2023)',
-    width=600,
-    height=300
+choices = [
+    'Unknown (Researchers & Institutions)',
+    'Orthopedics',
+    'Cardiology',
+    'Oncology & Hematology',
+    'Neurology & Neurosurgery',
+    'Psychiatry & Mental Health',
+    'Internal Med & Primary Care',
+    'Advanced Practice Providers',
+    'Dermatology',
+    'General & Other Surgery',
+]
+
+# Unmatched rows keep their original specialty_clean name
+df_cms['specialty_grouped'] = np.select(conditions, choices, default=df_cms['specialty_clean'])
+
+# Aggregate and take top 10
+spec_totals = (
+    df_cms.groupby('specialty_grouped')['payment_amount']
+    .sum()
+    .reset_index()
+    .sort_values('payment_amount', ascending=False)
+    .head(10)
 )
 
-spec_chart.display()
-```
-
-### Data Findings & Logical Decomposition
-
-* **The Transparency Blind Spot: Dominance of "Unknown" Specialties**
-* The visualization indicates that the "Unknown" category commands the highest share of funding, totaling nearly **$800 million**.
-* In a policy context, this is not merely a statistical omission but a deep-seated phenomenon: it reveals that a massive volume of capital flows to individuals or entities without a registered clinical specialty in the CMS system.
-* Synthesizing this with payment nature data, these payments are largely tied to high-value **Royalty or License** agreements for intellectual property, often paid to researchers or non-practicing physicians.
-* This highlights that the industry’s most potent economic incentives are often shielded within the "upstream" segments of the transparency framework, where professional identities are less defined.
-
-
-* **The Siphoning Effect of Technology-Intensive Specialties**
-* Among identified clinical fields, **Orthopaedic Surgery** leads significantly with over **$400 million** in total funding.
-* **High-Value Device Logic**: The high rankings of Orthopaedics and **Neurological Surgery** validate the hypothesis that industry funding is heavily concentrated in sectors reliant on expensive, high-tech medical devices.
-* **Divergent Interaction Models**: A contrast emerges when comparing **Internal Medicine**, which ranks second in total value but boasts over **1.3 million individual payments**—nearly six times the frequency of Orthopaedics.
-* This reveals two distinct industry strategies: "high-stakes technical bonding" for surgical specialties versus "high-frequency marketing coverage" for primary care and internal medicine.
-
-
-
-```python
-#| label: specialty-analysis
-#| echo: false
-```
-
-### Core Conclusion: The Genesis of Structural Inequality
-
-The results of this distribution analysis provide direct evidence regarding the concentration of resources:
-
-1. **Extreme Resource Imbalance**: Industry sponsorship is not distributed based on patient volume or disease burden; instead, it is heavily skewed toward high-profit, device-driven disciplines.
-2. **Conflict of Interest Hotspots**: The high funding intensity in Orthopaedics and Cardiovascular Disease implies that clinical guidelines and product selections in these fields face a much higher risk of Conflict of Interest (COI) than other disciplines.
-3. **Preliminary Evidence of Inequality**: This financial chasm between specialties may create an internal economic hierarchy within the medical system, driven by varying levels of industrial support.
-
-
-
-## 2. Proportional Distribution of Industry Payment Types
-
-While the specialty distribution illustrates a horizontal concentration across different fields, it does not explain how these payments are structured. Specifically: What is the nature of these payments? Are they routine meal expenses spread across many, or multi-million dollar royalties monopolized by a few?
-
-The subsequent **"Payment Type Distribution Analysis"** will decode the specific composition of these economic weights, further deconstructing the operational mechanisms of industry influence.
-
-```{python}
-#| label: payment-type-distribution
-# 2. Data aggregation
-type_dist = df_details.groupby('payment_type_clean')['payment_amount'].sum().reset_index()
-
-# Visualization: Donut Chart
-type_chart = alt.Chart(type_dist).mark_arc(innerRadius=60).encode(
-    theta=alt.Theta(field="payment_amount", type="quantitative"),
-    color=alt.Color(field="payment_type_clean", type="nominal", 
-                    title="Payment Nature",
-                    sort=alt.EncodingSortField(field="payment_amount", order='descending')),
+spec_chart = alt.Chart(spec_totals).mark_bar().encode(
+    x=alt.X('payment_amount:Q', title='Total Payments (USD)', axis=alt.Axis(format='$.2s')),
+    y=alt.Y('specialty_grouped:N', sort='-x', title='Specialty Group'),
+    color=alt.condition(
+        alt.datum.specialty_grouped == 'Unknown (Researchers & Institutions)',
+        alt.value('#d9534f'),
+        alt.value('#2166ac')
+    ),
     tooltip=[
-        alt.Tooltip('payment_type_clean:N', title='Category'),
-        alt.Tooltip('payment_amount:Q', format='$,.0f', title='Total Amount')
+        alt.Tooltip('specialty_grouped:N', title='Specialty Group'),
+        alt.Tooltip('payment_amount:Q', format='$,.0f', title='Total Payments')
     ]
 ).properties(
-    title='Proportional Distribution of Industry Payment Types (2023)',
-    width=400,
-    height=400
+    title='Top 10 Specialty Groups by Total Industry Payments (2023)',
+    width=220,
+    height=200
 )
 
-type_chart.display()
+# --- Plot 2: Payment Type Logic ---
+type_dist = (
+    df_cms.groupby('payment_type_clean')['payment_amount']
+    .sum().reset_index().sort_values('payment_amount', ascending=False)
+)
 
-
-```
-
-### Data Findings & Logical Decomposition
-
-* **The Core of Economic Weight: Royalty & License**
-* The donut chart reveals that **Royalty / License** fees command the largest share of total funding, amounting to approximately **$1.19 billion**.
-* This confirms that the industry's primary economic incentives are not scattered daily subsidies but long-term financial interests deeply tied to intellectual property.
-* Such massive payments are typically concentrated among a small number of highly influential researchers or institutions.
-
-
-* **Deep Penetration into Professional Decision-Making: Consulting & Professional Services**
-* **Non-consulting professional services** and **Consulting fees** represent the second-largest tier of funding.
-* This reflects a strategic partnership where the industry hires physicians as speakers or consultants, integrating financial interests into academic dissemination and clinical decision-making processes.
-
-
-* **Normalization of Routine Interaction: Food & Beverage**
-* Although **Food & Beverage** payments account for a much smaller percentage of the total dollar amount, they occur with extreme frequency.
-* This "high-frequency, low-value" interaction model represents a pervasive penetration into the daily lives of clinicians, aiming to build brand familiarity and maintain relationships through subtle, sustained influence.
-
-
-
-```python
-#| label: payment-type-distribution
-#| echo: false
-
-```
-
-### Core Conclusion: Deep Economic Integration
-
-The distribution of payment types addresses the vertical structure of industry influence:
-
-1. **Asymmetry of Financial Ties**: A disproportionate amount of capital flows via royalties to a tiny elite, creating significant economic monopolies that may exacerbate resource inequality within the medical field.
-2. **Risks to Professional Autonomy**: The prevalence of consulting and service fees increases the risk of professional judgment being influenced by financial interests, particularly in specialties where high-value payments are concentrated.
-3. **Diversified Penetration Strategies**: Industry utilizes a dual strategy of "high-stakes economic bonding" and "high-frequency routine penetration" to shape the healthcare ecosystem comprehensively.
-
-
-## 3. Wealth Alignment Analysis: Socio-economic Indicators and Industry Payments
-
-Following the analysis of "horizontal concentration" by specialty and "vertical weight" by payment nature, this section explores whether these industrial funds are geographically tied to regional economic levels. By integrating socio-economic indicators from the **American Community Survey (ACS)**, we conduct a correlation test between state median household income and the intensity of industry funding received per household.
-
-```{python}
-#| label: socio-economic-correlation
-# Load the state-level summary with economic indicators
-df_state = pd.read_csv("data/derived-data/cms_acs_state_summary.csv")
-
-# Visualization: Scatter Plot with Regression
-scatter = alt.Chart(df_state).mark_circle(size=100, opacity=0.7).encode(
-    x=alt.X('median_income:Q', 
-            title='State Median Household Income (USD)', 
-            scale=alt.Scale(zero=False)),
-    y=alt.Y('payment_per_household:Q', 
-            title='Industry Payment per Household (USD)'),
-    color=alt.value('steelblue'),
-    tooltip=['state_name', 
-             alt.Tooltip('median_income:Q', format='$,.0f'), 
-             alt.Tooltip('payment_per_household:Q', format='$.2f')]
+type_chart = alt.Chart(type_dist).mark_bar().encode(
+    x=alt.X('payment_amount:Q', title='Total (USD)', axis=alt.Axis(format='$.1s')),
+    y=alt.Y('payment_type_clean:N', sort='-x', title=None),
+    color=alt.value('#2166ac')
 ).properties(
-    title='Correlation: State Household Wealth vs. Healthcare Industry Payments',
-    width=600,
-    height=400
+    title='Payment Type Distribution',
+    width=220,
+    height=200
 )
 
-# Add a linear regression line to visualize the trend
-final_plot = scatter + scatter.transform_regression('median_income', 'payment_per_household').mark_line(color='red')
+p1 = (spec_chart | type_chart).configure_axis(
+    labelFontSize=9,
+    titleFontSize=10
+).configure_title(fontSize=12)
 
-final_plot.display()
+p1.save('plot1.png')
 ```
+![Specialty Group and Payment Type Analysis](plot1.png){width=85%}
 
-### Data Findings & Logical Decomposition
+**Geographic Distribution of Payment Intensity：**
 
-* **Significant Positive Correlation Trend**
-* The scatter plot and the fitted regression line demonstrate a clear positive relationship between **State Median Household Income** and **Industry Payment per Household**.
-* This finding validates a market-driven logic: industry capital is not primarily directed toward economically disadvantaged areas to fill basic healthcare gaps; instead, it tends to gravitate toward the healthcare ecosystems of wealthier regions. This likely reflects the higher purchasing power, more advanced medical facilities, and broader private insurance coverage in high-income areas, which in turn attracts greater industry intervention.
+Industry payments are not evenly distributed across the United States. The map shows a clear concentration in Northeastern states, particularly Pennsylvania and Massachusetts. These states host major medical research institutions. These organizations hold lucrative patents. As a result, they attract massive royalty payments. This pattern highlights a stark reality. Industry money follows research infrastructure and regional wealth. It does not follow patient healthcare needs.
 
-
-* **Extreme Outliers in High-Income States**
-* Notably, in the high-income bracket where median income exceeds **$70,000**, several significant outliers appear far above the regression line.
-* **Policy Interpretation**: These outliers typically represent states housing top-tier research and teaching hospitals, high-tech biomedical clusters, or holders of high-value specific patents (e.g., California or Massachusetts). In these regions, industry funding has evolved beyond routine marketing into deep capital and technological integration.
-
-
-
-```python
-#| label: wealth-correlation-analysis
-#| echo: false
-
-```
-
-### Core Conclusion: Shaping the Distribution of Influence via Economic Environments
-
-This correlation analysis directly addresses research questions regarding social equity:
-
-1. **Wealth Alignment Effect**: Industry payments exhibit a distinct "preference for prosperity" in their geographic distribution. The synchronous growth of funding with regional wealth levels suggests that industry prioritize market potential and return on investment when allocating resources.
-2. **Exacerbation of Resource Concentration**: High-income states not only possess richer public resources but also receive a disproportionate share of industrial funding. This "icing on the cake" model may further widen the healthcare resource gap between states.
-3. **Geographic Roots of Inequality**: If the geographic distribution of industry influence remains tethered to wealth, physicians and patients in low-income areas may face a relative disadvantage in accessing medical innovation and professional educational resources.
-
-
-## 4. Geographic Distribution and Spatial Imbalance
-
-While the wealth alignment analysis establishes a statistical link between income and funding, a **geographic visualization** is essential to identify specific "hotspots" of industry influence across the United States. This map normalizes total payments by the number of households in each state, providing a measure of **payment intensity** that allows for direct cross-state comparisons.
 ```{python}
-#| label: national-map
-from vega_datasets import data
+#| label: plot3-4
+#| echo: false
+from vega_datasets import data as vega_data
+df_acs = pd.read_csv("data/derived-data/acs_state_clean.csv")
 
-# Load US states topojson
-states_topo = alt.topo_feature(data.us_10m.url, 'states')
+state_payments = (
+    df_cms.groupby('state')['payment_amount']
+    .sum()
+    .reset_index()
+)
 
-# Map state abbreviations to numeric IDs for Altair mapping
-# (This ensures your 'state' column matches the Map IDs)
+df_state = pd.merge(
+    state_payments,
+    df_acs,
+    left_on='state',
+    right_on='state_abbr',
+    how='inner'
+)
+df_state['payment_per_household'] = df_state['payment_amount'] / df_state['total_households']
+
+states_topo = alt.topo_feature(vega_data.us_10m.url, 'states')
+
 state_id_map = {
     'AL': 1, 'AK': 2, 'AZ': 4, 'AR': 5, 'CA': 6, 'CO': 8, 'CT': 9, 'DE': 10, 'FL': 12, 'GA': 13,
     'HI': 15, 'ID': 16, 'IL': 17, 'IN': 18, 'IA': 19, 'KS': 20, 'KY': 21, 'LA': 22, 'ME': 23,
@@ -273,14 +187,13 @@ state_id_map = {
 }
 df_state['id'] = df_state['state'].map(state_id_map)
 
-# Visualization: Interactive Choropleth Map
 map_chart = alt.Chart(states_topo).mark_geoshape().encode(
-    color=alt.Color('payment_per_household:Q', 
-                    title='Payment/Household ($)', 
+    color=alt.Color('payment_per_household:Q',
+                    title='Payment / Household ($)',
                     scale=alt.Scale(scheme='tealblues')),
     tooltip=[
         alt.Tooltip('state_name:N', title='State'),
-        alt.Tooltip('payment_per_household:Q', title='Payment Density', format='$.2f'),
+        alt.Tooltip('payment_per_household:Q', title='Payment per Household', format='$.2f'),
         alt.Tooltip('median_income:Q', title='Median Income', format='$,.0f')
     ]
 ).transform_lookup(
@@ -289,7 +202,532 @@ map_chart = alt.Chart(states_topo).mark_geoshape().encode(
 ).project(
     type='albersUsa'
 ).properties(
-    title='Geographic Density of Industry Payments Across the US (2023)',
+    title='Geographic Distribution of Industry Payment Intensity (2023)',
+    width=260,
+    height=200
+)
+
+# --- Plot 4: Scatter Plot ---
+scatter = alt.Chart(df_state).mark_circle(size=100, opacity=0.7).encode(
+    x=alt.X('median_income:Q',
+            title='State Median Household Income (USD)',
+            scale=alt.Scale(zero=False)),
+    y=alt.Y('payment_per_household:Q',
+            title='Industry Payment per Household (USD)'),
+    color=alt.value('steelblue'),
+    tooltip=[
+        'state_name',
+        alt.Tooltip('median_income:Q', format='$,.0f'),
+        alt.Tooltip('payment_per_household:Q', format='$.2f')
+    ]
+).properties(
+    title='State Median Household Income vs. Industry Payment Intensity (2023)',
+    width=260,
+    height=200
+)
+
+regression = scatter.transform_regression(
+    'median_income', 'payment_per_household'
+).mark_line(color='red')
+
+outliers = df_state[df_state['state'].isin(['PA', 'MA'])]
+
+labels = alt.Chart(outliers).mark_text(
+    align='left',
+    dx=6,
+    dy=-4,
+    fontSize=11,
+    color='#d9534f'
+).encode(
+    x='median_income:Q',
+    y='payment_per_household:Q',
+    text='state:N'
+)
+
+p2 = (map_chart | (scatter + regression + labels)).configure_axis(
+    labelFontSize=8,
+    titleFontSize=9
+).configure_title(fontSize=11)
+
+p2.save('plot2.png')
+```
+![Geographic Distribution and Wealth Correlation](plot2.png){width=85%}
+
+**Payment Concentration (Lorenz Curve):**
+The plot reveals that excluding teaching hospitals changes almost nothing. The top 1% of individual physicians still capture 66.0% of these payments. So the extreme concentration is not a corporate outlier effect. Industry funds are not distributed broadly: a tiny elite captures the vast majority of this multibillion-dollar pool.
+```{python}
+#| label: plot5
+#| echo: false
+
+# All recipients
+recipient_totals = (
+    df_cms.groupby(['recipient_id', 'recipient_type'])['payment_amount']
+    .sum()
+    .sort_values(ascending=True)
+    .reset_index()
+)
+
+recipient_totals['cum_percent_money'] = (
+    recipient_totals['payment_amount'].cumsum() / recipient_totals['payment_amount'].sum()
+)
+recipient_totals['cum_percent_people'] = (
+    (recipient_totals.index + 1) / len(recipient_totals)
+)
+
+# Physicians only (exclude Teaching Hospitals)
+physician_totals = (
+    df_cms[df_cms['recipient_type'] != 'Covered Recipient Teaching Hospital']
+    .groupby('recipient_id')['payment_amount']
+    .sum()
+    .sort_values(ascending=True)
+    .reset_index()
+)
+
+physician_totals['cum_percent_money'] = (
+    physician_totals['payment_amount'].cumsum() / physician_totals['payment_amount'].sum()
+)
+physician_totals['cum_percent_people'] = (
+    (physician_totals.index + 1) / len(physician_totals)
+)
+
+# Top 1% values
+top_1_all = 1.0 - recipient_totals[
+    recipient_totals['cum_percent_people'] <= 0.99
+]['cum_percent_money'].max()
+
+top_1_physicians = 1.0 - physician_totals[
+    physician_totals['cum_percent_people'] <= 0.99
+]['cum_percent_money'].max()
+
+# Sample for plotting
+all_sample = (
+    recipient_totals
+    .sample(n=min(5000, len(recipient_totals)), random_state=42)
+    .sort_values('cum_percent_people')
+    .assign(group='All Recipients')
+)
+
+physician_sample = (
+    physician_totals
+    .sample(n=min(5000, len(physician_totals)), random_state=42)
+    .sort_values('cum_percent_people')
+    .assign(group='Physicians Only')
+)
+
+combined = pd.concat([all_sample, physician_sample])
+
+# Chart
+curve = alt.Chart(combined).mark_line(strokeWidth=2).encode(
+    x=alt.X('cum_percent_people:Q', title='Cumulative Share of Recipients', axis=alt.Axis(format='%')),
+    y=alt.Y('cum_percent_money:Q', title='Cumulative Share of Total Payments', axis=alt.Axis(format='%')),
+    color=alt.Color('group:N', 
+                    title='Group',
+                    scale=alt.Scale(
+                        domain=['All Recipients', 'Physicians Only'],
+                        range=['#e63946', '#2166ac']
+                    )),
+    tooltip=['group', 'cum_percent_people', 'cum_percent_money']
+).properties(
+    title=f'Payment Concentration: All Recipients ({top_1_all:.1%}) vs Physicians Only ({top_1_physicians:.1%})',
+    width=200,
+    height=150
+)
+
+equality_line = alt.Chart(pd.DataFrame({'x': [0, 1], 'y': [0, 1]})).mark_line(
+    strokeDash=[5, 5], color='gray'
+).encode(x='x', y='y')
+
+p3 = (equality_line + curve)
+
+p3.save('plot3.png')
+```
+![Payment Concentration Lorenz Curve](plot3.png){width=70% fig-align="center"}
+
+## 4. Streamlit Dashboard
+
+The interactive dashboard allows users to explore payment patterns by state, specialty, and income level. It includes:
+
+- **Dynamic Filters:** Users can isolate specific medical specialties. They can also filter states by median household income percentiles.
+- **Real-Time Metrics:** The dashboard calculates live summary statistics. It specifically highlights the exact share of funds captured by the top 1% of individual clinicians.
+- **Specialty Breakdown:** A horizontal bar chart ranks total payments by clinical field. It uses red color-coding to clearly separate institutional funding from individual doctors.
+- **Payment Concentration:** A Lorenz curve visualizes extreme wealth inequality. This chart explicitly filters out teaching hospitals. This ensures the curve accurately reflects disparities among human physicians.
+- **Geographic Distribution:** An interactive map displays payment intensity per household across the United States. This reveals regional industry clustering.
+
+Dashboard URL: [https://qgdashboard.streamlit.app/]
+
+## 5. Policy Implications
+
+**Targeted oversight of high-value recipients.** The top 1% of recipients capture 66.0% of all industry funding. Regulatory agencies should focus their oversight resources on this small group. This strategy is particularly effective for monitoring those who receive large royalty and licensing payments.
+
+**Specialty-specific disclosure.** Financial patterns vary significantly across medical fields. Payments to device-heavy specialties like Orthopedics differ from routine marketing in Primary Care. Future reporting requirements should reflect these structural differences more explicitly.
+
+**Geographic equity.** Industry payments cluster in high-income, research-dense states. Policy incentives to broaden geographic distribution of research collaboration could help address this gap.
+
+::: {.content-visible when-format="html"}
+## Full Analysis (HTML only) {.unnumbered}
+
+The sections below contain the complete data processing and visualizations. They are included in the HTML output; for the 3-page PDF writeup, only the content above is used.
+
+## 1. Preprocessing
+
+This file downloads, cleans, and standardizes the raw CMS Open Payments and ACS Census data. Outputs are saved to `data/derived-data/` for use in `Final_project.qmd`.
+```{python}
+#| label: setup
+import os
+import requests
+import pandas as pd
+
+# Path configuration
+RAW_DATA_DIR = "data/raw-data"
+DERIVED_DATA_DIR = "data/derived-data"
+CMS_RAW_PATH = os.path.join(RAW_DATA_DIR, "open_payments_2023_national.csv")
+ACS_RAW_PATH = os.path.join(RAW_DATA_DIR, "ACSDP1Y2023.DP03-2026-02-27T224607.csv")
+
+os.makedirs(RAW_DATA_DIR, exist_ok=True)
+os.makedirs(DERIVED_DATA_DIR, exist_ok=True)
+```
+
+### Step 1: Load or Fetch CMS Data
+```{python}
+#| label: load-cms
+if os.path.exists(CMS_RAW_PATH):
+    print("Loading CMS data from cache...")
+    payments_df = pd.read_csv(CMS_RAW_PATH)
+else:
+    print("Fetching CMS data from API...")
+    url = "https://openpaymentsdata.cms.gov/api/1/metastore/schemas/dataset/items/fb3a65aa-c901-4a38-a813-b04b00dfa2a9"
+    r = requests.get(url)
+    r.raise_for_status()
+    csv_url = r.json()["distribution"][0]["downloadURL"]
+
+    usecols = [
+        "Covered_Recipient_Profile_ID", "Covered_Recipient_Specialty_1",
+        "Total_Amount_of_Payment_USDollars", "Date_of_Payment",
+        "Nature_of_Payment_or_Transfer_of_Value", "Recipient_State", "Covered_Recipient_Type"
+    ]
+
+    print("Downloading chunks...")
+    chunks = pd.read_csv(csv_url, usecols=usecols, chunksize=200_000, low_memory=False)
+    payments_df = pd.concat(chunks, ignore_index=True)
+    payments_df.to_csv(CMS_RAW_PATH, index=False)
+
+print(f"CMS data loaded: {len(payments_df):,} rows")
+```
+
+### Step 2: Clean CMS Data
+```{python}
+#| label: clean-cms
+# Filter out zero/negative payments
+payments_df = payments_df[payments_df["Total_Amount_of_Payment_USDollars"] > 0].copy()
+
+# Standardize column names
+payments_df.columns = payments_df.columns.str.lower()
+payments_df = payments_df.rename(columns={
+    "covered_recipient_profile_id": "recipient_id",
+    "total_amount_of_payment_usdollars": "payment_amount",
+    "recipient_state": "state",
+    "covered_recipient_specialty_1": "specialty",
+    "nature_of_payment_or_transfer_of_value": "payment_type",
+    "covered_recipient_type": "recipient_type"
+})
+
+# Clean specialty names
+payments_df["specialty_clean"] = (
+    payments_df["specialty"]
+    .str.split("|")
+    .str[-1]
+    .str.strip()
+    .fillna("Unknown")
+)
+
+# Standardize payment type labels
+nature_map = {
+    "Compensation for services other than consulting, including serving as faculty or as a speaker at a venue other than a continuing education program": "Non-consulting professional services",
+    "Consulting Fee":                          "Consulting",
+    "Food and Beverage":                       "Food & Beverage",
+    "Travel and Lodging":                      "Travel & Lodging",
+    "Royalty or License":                      "Royalty / License",
+    "Honoraria":                               "Honoraria",
+    "Education":                               "Education",
+    "Grant":                                   "Grant",
+    "Acquisitions":                            "Acquisitions",
+    "Entertainment":                           "Entertainment",
+    "Long term medical supply or device loan": "Device / Supply Loan"
+}
+payments_df["payment_type_clean"] = (
+    payments_df["payment_type"]
+    .map(nature_map)
+    .fillna("Other")
+)
+payments_df["state"] = payments_df["state"].fillna("Unknown")
+
+print("CMS cleaning complete.")
+print(payments_df[["recipient_id", "recipient_type", "state", "specialty_clean", "payment_type_clean", "payment_amount"]].head())
+```
+
+### Step 3: Load and Clean ACS Data
+```{python}
+#| label: clean-acs
+if not os.path.exists(ACS_RAW_PATH):
+    raise FileNotFoundError(f"Missing ACS file at {ACS_RAW_PATH}. Please ensure it is in data/raw-data/")
+
+df_acs_raw = pd.read_csv(ACS_RAW_PATH).set_index('Label (Grouping)')
+
+estimate_cols = [c for c in df_acs_raw.columns if "!!Estimate" in c]
+df_estimates = df_acs_raw[estimate_cols].T
+
+income_lbl = [idx for idx in df_acs_raw.index if "Median household income (dollars)" in idx][0]
+hh_lbl = [idx for idx in df_acs_raw.index if "Total households" in idx][0]
+
+df_acs = df_estimates[[income_lbl, hh_lbl]].copy()
+df_acs.columns = ['median_income', 'total_households']
+
+for col in df_acs.columns:
+    df_acs[col] = pd.to_numeric(df_acs[col].astype(str).str.replace(',', ''), errors='coerce')
+
+df_acs.index = df_acs.index.str.replace("!!Estimate", "")
+df_acs = df_acs.reset_index().rename(columns={'index': 'state_name'})
+
+state_to_abbr = {
+    "Alabama": "AL", "Alaska": "AK", "Arizona": "AZ", "Arkansas": "AR", "California": "CA",
+    "Colorado": "CO", "Connecticut": "CT", "Delaware": "DE", "Florida": "FL", "Georgia": "GA",
+    "Hawaii": "HI", "Idaho": "ID", "Illinois": "IL", "Indiana": "IN", "Iowa": "IA",
+    "Kansas": "KS", "Kentucky": "KY", "Louisiana": "LA", "Maine": "ME", "Maryland": "MD",
+    "Massachusetts": "MA", "Michigan": "MI", "Minnesota": "MN", "Mississippi": "MS", "Missouri": "MO",
+    "Montana": "MT", "Nebraska": "NE", "Nevada": "NV", "New Hampshire": "NH", "New Jersey": "NJ",
+    "New Mexico": "NM", "New York": "NY", "North Carolina": "NC", "North Dakota": "ND", "Ohio": "OH",
+    "Oklahoma": "OK", "Oregon": "OR", "Pennsylvania": "PA", "Rhode Island": "RI", "South Carolina": "SC",
+    "South Dakota": "SD", "Tennessee": "TN", "Texas": "TX", "Utah": "UT", "Vermont": "VT",
+    "Virginia": "VA", "Washington": "WA", "West Virginia": "WV", "Wisconsin": "WI", "Wyoming": "WY",
+    "District of Columbia": "DC"
+}
+df_acs['state_abbr'] = df_acs['state_name'].map(state_to_abbr)
+
+print("ACS cleaning complete.")
+print(df_acs.head())
+```
+
+### Step 4: Save Outputs
+```{python}
+#| label: save-outputs
+# Output 1: Row-level cleaned CMS payments
+payments_df[['recipient_id', 'recipient_type', 'state', 'specialty_clean', 'payment_type_clean', 'payment_amount']].to_csv(
+    "data/derived-data/cms_payments_clean.csv", index=False
+)
+
+# Output 2: Cleaned ACS state-level indicators
+df_acs.to_csv("data/derived-data/acs_state_clean.csv", index=False)
+
+print("Outputs saved to data/derived-data/:")
+print("  - cms_payments_clean.csv")
+print("  - acs_state_clean.csv")
+```
+
+## 2. Static Plot Code
+
+Individual plot code files are in the `code/` folder:
+
+- `code/plot1_specialty.qmd`
+- `code/plot2_payment_type.qmd`
+- `code/plot3_wealth_alignment.qmd`
+- `code/plot4_map.qmd`
+- `code/plot5_lorenz.qmd`
+
+Each file reads from `data/derived-data/` and saves the corresponding PNG to `data/derived-data/`.
+
+### Plot 1: Industry Payments by Specialty Group
+
+```{python}
+#| label: appendix-plot1
+#| echo: true
+#| eval: false
+import pandas as pd
+import numpy as np
+import altair as alt
+
+df_cms = pd.read_csv("data/derived-data/cms_payments_clean.csv")
+
+# responding to professor's question:
+# 1. exploring the 'unknown' group
+unknown_entities = df_cms[df_cms['specialty_clean'] == 'Unknown']['recipient_type'].value_counts()
+print(unknown_entities)
+# The 'Unknown' category belongs to Teaching Hospitals, which do not have individual medical specialties listed in the CMS database.
+
+# 2. Group specialties into high-level categories.
+# Unmatched specialties retain their original name (no "Other" catch-all).
+conditions = [
+    df_cms['specialty_clean'] == 'Unknown',
+    df_cms['specialty_clean'].str.contains('Orthopaedic|Orthopedic', case=False, na=False) &
+        ~df_cms['specialty_clean'].str.contains('Orthodontic', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Cardio|Heart', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Oncology|Hematolog', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Neurolog|Neurosurg|Neuroradio', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Psychiatr|Mental Health', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Internal Medicine|Family Medicine|Family Health|General Practice|Primary Care|Adult Medicine', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Nurse|Physician Assistant', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Dermatolog', case=False, na=False),
+    df_cms['specialty_clean'].str.contains('Surgery|Surgeon', case=False, na=False),
+]
+
+choices = [
+    'Unknown (Researchers & Institutions)',
+    'Orthopedics',
+    'Cardiology',
+    'Oncology & Hematology',
+    'Neurology & Neurosurgery',
+    'Psychiatry & Mental Health',
+    'Internal Med & Primary Care',
+    'Advanced Practice Providers',
+    'Dermatology',
+    'General & Other Surgery',
+]
+
+# Unmatched rows keep their original specialty_clean name
+df_cms['specialty_grouped'] = np.select(conditions, choices, default=df_cms['specialty_clean'])
+
+# Aggregate and take top 10
+spec_totals = (
+    df_cms.groupby('specialty_grouped')['payment_amount']
+    .sum()
+    .reset_index()
+    .sort_values('payment_amount', ascending=False)
+    .head(10)
+)
+
+spec_chart = alt.Chart(spec_totals).mark_bar().encode(
+    x=alt.X('payment_amount:Q', title='Total Payments (USD)', axis=alt.Axis(format='$.2s')),
+    y=alt.Y('specialty_grouped:N', sort='-x', title='Specialty Group'),
+    color=alt.condition(
+        alt.datum.specialty_grouped == 'Unknown (Researchers & Institutions)',
+        alt.value('#d9534f'),
+        alt.value('#2166ac')
+    ),
+    tooltip=[
+        alt.Tooltip('specialty_grouped:N', title='Specialty Group'),
+        alt.Tooltip('payment_amount:Q', format='$,.0f', title='Total Payments')
+    ]
+).properties(
+    title='Top 10 Specialty Groups by Total Industry Payments (2023)',
+    width=220,
+    height=200
+)
+
+# --- Plot 2: Payment Type Logic ---
+type_dist = (
+    df_cms.groupby('payment_type_clean')['payment_amount']
+    .sum()
+    .reset_index()
+    .sort_values('payment_amount', ascending=False)
+)
+
+type_chart = alt.Chart(type_dist).mark_bar().encode(
+    x=alt.X('payment_amount:Q', title='Total Payments (USD)', axis=alt.Axis(format='$.2s')),
+    y=alt.Y('payment_type_clean:N', sort='-x', title='Payment Type'),
+    color=alt.value('#2166ac'),
+    tooltip=[
+        alt.Tooltip('payment_type_clean:N', title='Category'),
+        alt.Tooltip('payment_amount:Q', format='$,.0f', title='Total Amount')
+    ]
+).properties(
+    title='Distribution of Industry Payment Types (2023)',
+    width=220,
+    height=200
+)
+
+type_chart.display()
+```
+
+The "Unknown" category receives the most funding. It totals approximately $800 million. This reflects a reporting structure, as CMS does not assign specific medical specialties to these corporate entities.
+
+Among clinical specialties, Orthopedics ranks first with over $500 million. This total is more than double the next highest specialty. Internal Medicine follows at about $237 million, driven by high-frequency, low-value payments such as meals rather than large device or royalty agreements.
+
+
+### Plot 2: Distribution of Payment Types
+
+```{python}
+#| label: appendix-plot2
+#| echo: true
+#| eval: false
+type_dist = (
+    df_cms.groupby('payment_type_clean')['payment_amount']
+    .sum()
+    .reset_index()
+    .sort_values('payment_amount', ascending=False)
+)
+
+type_chart = alt.Chart(type_dist).mark_bar().encode(
+    x=alt.X('payment_amount:Q', title='Total Payments (USD)', axis=alt.Axis(format='$.2s')),
+    y=alt.Y('payment_type_clean:N', sort='-x', title='Payment Type'),
+    color=alt.value('#2166ac'),
+    tooltip=[
+        alt.Tooltip('payment_type_clean:N', title='Category'),
+        alt.Tooltip('payment_amount:Q', format='$,.0f', title='Total Amount')
+    ]
+).properties(
+    title='Distribution of Industry Payment Types (2023)',
+    width=220,
+    height=200
+)
+
+type_chart.display()
+```
+
+Royalty and License fees total approximately $1.19B, making them the largest payment category by a wide margin. Intellectual property therefore drives the main financial link between industry and medicine. Day-to-day marketing is not the primary factor. Non-consulting professional services rank second in total value. In contrast, Food and Beverage payments have a very small dollar value. However, these payments happen constantly. They represent routine, low-cost contact with a massive number of doctors.
+
+
+### Plot 3: Geographic Distribution of Payment Intensity
+
+```{python}
+#| label: appendix-plot3
+#| echo: true
+#| eval: false
+from vega_datasets import data as vega_data
+
+df_acs = pd.read_csv("data/derived-data/acs_state_clean.csv")
+
+state_payments = (
+    df_cms.groupby('state')['payment_amount']
+    .sum()
+    .reset_index()
+)
+
+df_state = pd.merge(
+    state_payments,
+    df_acs,
+    left_on='state',
+    right_on='state_abbr',
+    how='inner'
+)
+df_state['payment_per_household'] = df_state['payment_amount'] / df_state['total_households']
+
+states_topo = alt.topo_feature(vega_data.us_10m.url, 'states')
+
+state_id_map = {
+    'AL': 1, 'AK': 2, 'AZ': 4, 'AR': 5, 'CA': 6, 'CO': 8, 'CT': 9, 'DE': 10, 'FL': 12, 'GA': 13,
+    'HI': 15, 'ID': 16, 'IL': 17, 'IN': 18, 'IA': 19, 'KS': 20, 'KY': 21, 'LA': 22, 'ME': 23,
+    'MD': 24, 'MA': 25, 'MI': 26, 'MN': 27, 'MS': 28, 'MO': 29, 'MT': 30, 'NE': 31, 'NV': 32,
+    'NH': 33, 'NJ': 34, 'NM': 35, 'NY': 36, 'NC': 37, 'ND': 38, 'OH': 39, 'OK': 40, 'OR': 41,
+    'PA': 42, 'RI': 44, 'SC': 45, 'SD': 46, 'TN': 47, 'TX': 48, 'UT': 49, 'VT': 50, 'VA': 51,
+    'WA': 53, 'WV': 54, 'WI': 55, 'WY': 56
+}
+df_state['id'] = df_state['state'].map(state_id_map)
+
+map_chart = alt.Chart(states_topo).mark_geoshape().encode(
+    color=alt.Color('payment_per_household:Q',
+                    title='Payment / Household ($)',
+                    scale=alt.Scale(scheme='tealblues')),
+    tooltip=[
+        alt.Tooltip('state_name:N', title='State'),
+        alt.Tooltip('payment_per_household:Q', title='Payment per Household', format='$.2f'),
+        alt.Tooltip('median_income:Q', title='Median Income', format='$,.0f')
+    ]
+).transform_lookup(
+    lookup='id',
+    from_=alt.LookupData(df_state, 'id', ['payment_per_household', 'state_name', 'median_income'])
+).project(
+    type='albersUsa'
+).properties(
+    title='Geographic Distribution of Industry Payment Intensity (2023)',
     width=700,
     height=400
 )
@@ -297,112 +735,374 @@ map_chart = alt.Chart(states_topo).mark_geoshape().encode(
 map_chart.display()
 ```
 
-### Data Findings & Logical Decomposition
+Industry payments are not evenly distributed across the United States. The map shows a clear concentration in Northeastern states, particularly Pennsylvania and Massachusetts. Most of the Midwest and Mountain West receives far less funding per household. This geographic pattern raises a natural question: what drives it?
 
-* **Regional Concentration and "Hotspots"**
-* The choropleth map reveals that industry payments are not uniformly distributed but are heavily clustered in specific Northeastern and Mid-Atlantic states.
-* **Pennsylvania** and **Massachusetts** emerge as the most prominent outliers, exhibiting the highest payment density per household (exceeding $80 per household in some areas). This concentration likely reflects the presence of major pharmaceutical hubs and elite academic medical centers in these regions.
-
-
-* **The Geographic "Tethering" Effect**
-* The map confirms that high-intensity zones are largely contiguous with the high-income states identified in the previous scatter plot.
-* Conversely, much of the **Midwest** and **Mountain West** display significantly lower payment densities (often below $20 per household). This spatial disparity suggests that industry engagement follows established economic and institutional infrastructures rather than being driven by a decentralized healthcare need.
-
-
-* **Implications of Spatial Clustering**
-* The extreme density in a few states indicates that a disproportionate share of industry-funded professional education, innovation, and consulting is sequestered in specific geographic corridors. This creates a "resource island" effect where clinicians in a handful of states have vastly more frequent interactions with industry resources than those in the rest of the country.
-
-
-```python
-#| label: geographic-map-analysis
-#| echo: false
-
-```
-
-### Core Conclusion: Spatial Inequity in Industry Engagement
-
-The geographic analysis provides the final piece of evidence for the project's central thesis:
-
-1. **Geographic Consolidation**: Industry influence is highly localized. The concentration of funds in specific states suggests that the "mitigating effect" of transparency under the Sunshine Act faces a geographic challenge: influence is concentrated where clinical and economic power is already greatest.
-2. **Access Disparities**: Clinicians and patients in low-density states may have less exposure to the newest (industry-funded) medical developments, while those in high-density states face much higher risks of systemic conflicts of interest.
-3. **Policy Need for Targeted Oversight**: Federal oversight may need to be supplemented by state-level transparency initiatives in "high-intensity" zones to address the unique pressures created by such extreme spatial concentration.
-
-## 5. Evidence of Extreme Financial Concentration
-
-In addition to the structural and geographic imbalances previously discussed, a longitudinal assessment of the recipient pool reveals a profound level of economic inequality. This section utilizes a **Concentration Curve** (similar to a Lorenz Curve) to demonstrate the disproportionate share of industry funding held by a minute fraction of medical professionals.
+### Plot 4: State Income vs. Payment Intensity
 
 ```{python}
-#| label: concentration-analysis
-con_df = pd.read_csv("data/derived-data/concentration_data.csv")
+#| label: appendix-plot4
+#| echo: true
+#| eval: false
 
-# Key takeaway: What percentage of the money did the top 1% of people take?
-top_1_percent_val = con_df[con_df['cum_percent_people'] <= 0.01]['cum_percent_money'].max()
-
-# Drawing a portion of the Lorenz Curve
-chart = alt.Chart(con_df.head(5000)).mark_line(color='#e63946', strokeWidth=3).encode(
-    x=alt.X('cum_percent_people:Q', title='Cumulative Share of Recipients', axis=alt.Axis(format='%')),
-    y=alt.Y('cum_percent_money:Q', title='Cumulative Share of Total Payments', axis=alt.Axis(format='%')),
-    tooltip=['cum_percent_people', 'cum_percent_money']
+scatter = alt.Chart(df_state).mark_circle(size=100, opacity=0.7).encode(
+    x=alt.X('median_income:Q',
+            title='State Median Household Income (USD)',
+            scale=alt.Scale(zero=False)),
+    y=alt.Y('payment_per_household:Q',
+            title='Industry Payment per Household (USD)'),
+    color=alt.value('steelblue'),
+    tooltip=[
+        'state_name',
+        alt.Tooltip('median_income:Q', format='$,.0f'),
+        alt.Tooltip('payment_per_household:Q', format='$.2f')
+    ]
 ).properties(
-    title=f"Extreme Concentration: Top 1% Recipients capture approx. {top_1_percent_val:.1%} of Total Funds",
+    title='State Median Household Income vs. Industry Payment Intensity (2023)',
     width=600,
     height=400
 )
 
-# Add a 45-degree line of absolute fairness for comparison
-line = alt.Chart(pd.DataFrame({'x': [0, 1], 'y': [0, 1]})).mark_line(strokeDash=[5,5], color='gray').encode(
-    x='x', y='y'
+regression = scatter.transform_regression(
+    'median_income', 'payment_per_household'
+).mark_line(color='red')
+
+(scatter + regression).display()
+```
+
+The scatter plot offers one explanation. The scatter plot shows that states with higher median household income tend to receive more industry funding per household. Pennsylvania and Massachusetts stand out as outliers, sitting well above the regression line. These states host major medical research institutions. These organizations hold lucrative patents. As a result, they attract massive royalty payments. This pattern highlights a stark reality. Industry money follows research infrastructure and regional wealth. It does not follow patient healthcare needs.
+
+### Plot 5: Payment Concentration (Lorenz Curve)
+
+```{python}
+#| label: appendix-plot5
+#| echo: true
+#| eval: false
+
+# All recipients
+recipient_totals = (
+    df_cms.groupby(['recipient_id', 'recipient_type'])['payment_amount']
+    .sum()
+    .sort_values(ascending=True)
+    .reset_index()
 )
 
-(line + chart).display()
+recipient_totals['cum_percent_money'] = (
+    recipient_totals['payment_amount'].cumsum() / recipient_totals['payment_amount'].sum()
+)
+recipient_totals['cum_percent_people'] = (
+    (recipient_totals.index + 1) / len(recipient_totals)
+)
+
+# Physicians only (exclude Teaching Hospitals)
+physician_totals = (
+    df_cms[df_cms['recipient_type'] != 'Covered Recipient Teaching Hospital']
+    .groupby('recipient_id')['payment_amount']
+    .sum()
+    .sort_values(ascending=True)
+    .reset_index()
+)
+
+physician_totals['cum_percent_money'] = (
+    physician_totals['payment_amount'].cumsum() / physician_totals['payment_amount'].sum()
+)
+physician_totals['cum_percent_people'] = (
+    (physician_totals.index + 1) / len(physician_totals)
+)
+
+# Top 1% values
+top_1_all = 1.0 - recipient_totals[
+    recipient_totals['cum_percent_people'] <= 0.99
+]['cum_percent_money'].max()
+
+top_1_physicians = 1.0 - physician_totals[
+    physician_totals['cum_percent_people'] <= 0.99
+]['cum_percent_money'].max()
+
+# Sample for plotting
+all_sample = (
+    recipient_totals
+    .sample(n=min(5000, len(recipient_totals)), random_state=42)
+    .sort_values('cum_percent_people')
+    .assign(group='All Recipients')
+)
+
+physician_sample = (
+    physician_totals
+    .sample(n=min(5000, len(physician_totals)), random_state=42)
+    .sort_values('cum_percent_people')
+    .assign(group='Physicians Only')
+)
+
+combined = pd.concat([all_sample, physician_sample])
+
+# Chart
+curve = alt.Chart(combined).mark_line(strokeWidth=2).encode(
+    x=alt.X('cum_percent_people:Q', title='Cumulative Share of Recipients', axis=alt.Axis(format='%')),
+    y=alt.Y('cum_percent_money:Q', title='Cumulative Share of Total Payments', axis=alt.Axis(format='%')),
+    color=alt.Color('group:N', 
+                    title='Group',
+                    scale=alt.Scale(
+                        domain=['All Recipients', 'Physicians Only'],
+                        range=['#e63946', '#2166ac']
+                    )),
+    tooltip=['group', 'cum_percent_people', 'cum_percent_money']
+).properties(
+    title=f'Payment Concentration: All Recipients ({top_1_all:.1%}) vs Physicians Only ({top_1_physicians:.1%})',
+    width=500,
+    height=280
+)
+
+equality_line = alt.Chart(pd.DataFrame({'x': [0, 1], 'y': [0, 1]})).mark_line(
+    strokeDash=[5, 5], color='gray'
+).encode(x='x', y='y')
+
+(equality_line + curve).display()
 ```
 
-### Data Findings & Logical Decomposition
-
-* **The "Hyper-Concentrated" Elite**:
-* The visualization indicates that the **top 1% of recipients** capture approximately **66.0% of the total industry funds**. This reveals that the vast majority of the multibillion-dollar pool is not distributed broadly for routine medical education or small-scale consulting but is instead sequestered by a tiny financial elite.
-* This "Pareto-style" distribution suggests that for most physicians, industry interaction is high-frequency but low-value (e.g., meals), while for the top 1%, it is a primary economic driver involving millions of dollars in individual payments.
+The plot reveals that excluding teaching hospitals changes almost nothing. The top 1% of individual physicians still capture 66.0% of these payments. So the extreme concentration is not a corporate outlier effect. Industry funds are not distributed broadly: a tiny elite captures the vast majority of this multibillion-dollar pool.
 
 
-* **Departure from Equality**:
-* The dashed diagonal line represents a hypothetical scenario of perfect equality (where 1% of people get 1% of the money).
-* The sharp, nearly vertical trajectory of the red line at the start of the x-axis illustrates the extreme "winner-take-all" nature of industry-physician financial relationships in 2023.
+## 4. Streamlit Dashboard
 
+```{python}
+#| eval: false
+#| include: false
+import streamlit as st
+import pandas as pd
+import altair as alt
+import numpy as np
+from vega_datasets import data
 
+st.set_page_config(layout="wide", page_title="Healthcare Industry Payment Dashboard")
 
-```python
-#| label: concentration-analysis
-#| echo: false
+# --------------------------
+# 1. Load Data
+# --------------------------
+@st.cache_data
+def load_data():
+    import gdown
+    import os
+    cms_path = "/tmp/cms_payments_clean.csv"
+    if not os.path.exists(cms_path):
+        gdown.download(
+            f"https://drive.google.com/uc?id=1h5VC-j6Q1SwLTChTP7PBJtrd6WsbHKo9",
+            cms_path,
+            quiet=False
+        )
+    df_cms = pd.read_csv(cms_path, 
+        usecols=['recipient_id', 'recipient_type', 'state', 'specialty_clean', 'payment_type_clean', 'payment_amount'],
+        dtype={
+            'recipient_id': 'str',
+            'recipient_type': 'category',
+            'state': 'category',
+            'specialty_clean': 'category',
+            'payment_type_clean': 'category',
+            'payment_amount': 'float32'
+        },
+        nrows=800000 
+    )
+    df_acs = pd.read_csv("data/derived-data/acs_state_clean.csv")
 
+    # Compute specialty_grouped
+    conditions = [
+        df_cms['specialty_clean'] == 'Unknown',
+        df_cms['specialty_clean'].str.contains('Orthopaedic|Orthopedic', case=False, na=False) &
+            ~df_cms['specialty_clean'].str.contains('Orthodontic', case=False, na=False),
+        df_cms['specialty_clean'].str.contains('Cardio|Heart', case=False, na=False),
+        df_cms['specialty_clean'].str.contains('Oncology|Hematolog', case=False, na=False),
+        df_cms['specialty_clean'].str.contains('Neurolog|Neurosurg|Neuroradio', case=False, na=False),
+        df_cms['specialty_clean'].str.contains('Psychiatr|Mental Health', case=False, na=False),
+        df_cms['specialty_clean'].str.contains('Internal Medicine|Family Medicine|Family Health|General Practice|Primary Care|Adult Medicine', case=False, na=False),
+        df_cms['specialty_clean'].str.contains('Nurse|Physician Assistant', case=False, na=False),
+        df_cms['specialty_clean'].str.contains('Dermatolog', case=False, na=False),
+        df_cms['specialty_clean'].str.contains('Surgery|Surgeon', case=False, na=False),
+    ]
+    choices = [
+        'Unknown (Researchers & Institutions)',
+        'Orthopedics',
+        'Cardiology',
+        'Oncology & Hematology',
+        'Neurology & Neurosurgery',
+        'Psychiatry & Mental Health',
+        'Internal Med & Primary Care',
+        'Advanced Practice Providers',
+        'Dermatology',
+        'General & Other Surgery',
+    ]
+    df_cms['specialty_grouped'] = np.select(conditions, choices, default=df_cms['specialty_clean'])
+
+    # Merge and compute payment intensity
+    state_payments = df_cms.groupby('state')['payment_amount'].sum().reset_index()
+    df_states = pd.merge(state_payments, df_acs, left_on='state', right_on='state_abbr', how='inner')
+    df_states['payment_per_household'] = df_states['payment_amount'] / df_states['total_households']
+
+    return df_cms, df_states
+
+df_cms, df_states = load_data()
+
+# --------------------------
+# 2. Prepare State Data
+# --------------------------
+fips_map = {
+    'AL': 1, 'AK': 2, 'AZ': 4, 'AR': 5, 'CA': 6, 'CO': 8, 'CT': 9, 'DE': 10,
+    'FL': 12, 'GA': 13, 'HI': 15, 'ID': 16, 'IL': 17, 'IN': 18, 'IA': 19,
+    'KS': 20, 'KY': 21, 'LA': 22, 'ME': 23, 'MD': 24, 'MA': 25, 'MI': 26,
+    'MN': 27, 'MS': 28, 'MO': 29, 'MT': 30, 'NE': 31, 'NV': 32, 'NH': 33,
+    'NJ': 34, 'NM': 35, 'NY': 36, 'NC': 37, 'ND': 38, 'OH': 39, 'OK': 40,
+    'OR': 41, 'PA': 42, 'RI': 44, 'SC': 45, 'SD': 46, 'TN': 47, 'TX': 48,
+    'UT': 49, 'VT': 50, 'VA': 51, 'WA': 53, 'WV': 54, 'WI': 55, 'WY': 56, 'DC': 11
+}
+
+df_states['fips_code'] = df_states['state'].map(fips_map)
+df_states['income_percentile'] = df_states['median_income'].rank(pct=True) * 100
+
+# --------------------------
+# 3. Sidebar Filters
+# --------------------------
+st.sidebar.title("Dashboard Controls")
+
+all_states = sorted(df_states['state'].unique())
+selected_states = st.sidebar.multiselect(
+    "Select States",
+    options=all_states,
+    default=all_states
+)
+
+all_specialties = sorted(df_cms['specialty_grouped'].unique())
+selected_specialty = st.sidebar.multiselect(
+    "Select Medical Specialties",
+    options=all_specialties,
+    default=["Orthopedics", "Internal Med & Primary Care"] 
+)
+
+income_range = st.sidebar.slider(
+    "Filter by State Income Percentile",
+    0, 100, (0, 100)
+)
+
+top_percent = st.sidebar.slider(
+    "Show Top % of Payments by Amount",
+    1.0, 100.0, 100.0
+)
+
+# --------------------------
+# 4. Filter Logic
+# --------------------------
+wealth_eligible_states = df_states[
+    (df_states['income_percentile'] >= income_range[0]) &
+    (df_states['income_percentile'] <= income_range[1])
+]['state']
+
+final_state_list = [s for s in selected_states if s in wealth_eligible_states.values]
+
+filtered_df = df_cms[
+    (df_cms['specialty_grouped'].isin(selected_specialty)) &
+    (df_cms['state'].isin(final_state_list))
+]
+
+if top_percent < 100 and len(filtered_df) > 0:
+    threshold = filtered_df['payment_amount'].quantile(1 - top_percent / 100)
+    filtered_df = filtered_df[filtered_df['payment_amount'] >= threshold]
+
+# --------------------------
+# 5. KPI Metrics
+# --------------------------
+st.title("Healthcare Industry Payment Dashboard")
+
+total_payments = filtered_df['payment_amount'].sum()
+
+top_1_share = 0
+if total_payments > 0:
+    ind_df = filtered_df[filtered_df['specialty_grouped'] != 'Unknown (Researchers & Institutions)']
+    if len(ind_df) > 0:
+        recip_totals = ind_df.groupby('recipient_id')['payment_amount'].sum()
+        top_1_threshold = recip_totals.quantile(0.99)
+        top_1_sum = recip_totals[recip_totals >= top_1_threshold].sum()
+        top_1_share = top_1_sum / recip_totals.sum()
+
+c1, c2, c3 = st.columns(3)
+c1.metric("Total Payments", f"${total_payments / 1e6:.1f}M")
+c2.metric("Top 1% Share (Individuals)", f"{top_1_share:.1%}")
+c3.metric("Number of Transactions", f"{len(filtered_df):,}")
+
+st.divider()
+
+# --------------------------
+# 6. Tabs
+# --------------------------
+tab1, tab2, tab3 = st.tabs(["Specialty Breakdown", "Payment Concentration", "Geographic Distribution"])
+
+with tab1:
+    st.subheader("Total Payments by Specialty")
+    if len(filtered_df) > 0:
+        spec_agg = (
+            filtered_df.groupby('specialty_grouped')['payment_amount']
+            .sum()
+            .reset_index()
+            .sort_values('payment_amount', ascending=False)
+        )
+        spec_bar = alt.Chart(spec_agg).mark_bar().encode(
+            x=alt.X('payment_amount:Q', title='Total Payment (USD)', axis=alt.Axis(format='$.2s')),
+            y=alt.Y('specialty_grouped:N', sort='-x', title='Specialty'),
+            color=alt.value('#2166ac')
+        ).properties(height=400)
+        st.altair_chart(spec_bar, use_container_width=True)
+    else:
+        st.warning("No data available for the selected filters.")
+
+with tab2:
+    st.subheader("Payment Concentration (Lorenz Curve for Individual Clinicians)")
+    st.markdown("*Note: Teaching Hospitals are excluded from this curve to accurately reflect individual wealth concentration.*")
+    
+    ind_df = filtered_df[filtered_df['specialty_grouped'] != 'Unknown (Researchers & Institutions)']
+    
+    if len(ind_df) > 0:
+        lorenz_df = ind_df.groupby('recipient_id')['payment_amount'].sum().sort_values(ascending=True).reset_index()
+        
+        lorenz_df['cum_percent_money'] = (
+            lorenz_df['payment_amount'].cumsum() / lorenz_df['payment_amount'].sum()
+        )
+        lorenz_df['cum_percent_people'] = (
+            np.arange(1, len(lorenz_df) + 1) / len(lorenz_df)
+        )
+
+        if len(lorenz_df) > 5000:
+            lorenz_df = lorenz_df.sample(n=5000, random_state=42).sort_values('cum_percent_people')
+
+        equality = alt.Chart(
+            pd.DataFrame({'x': [0, 1], 'y': [0, 1]})
+        ).mark_line(strokeDash=[5, 5], color='gray').encode(x='x', y='y')
+
+        lorenz = alt.Chart(lorenz_df).mark_line(color='#e63946', size=3).encode(
+            x=alt.X('cum_percent_people:Q', title='Cumulative Share of Individual Recipients', axis=alt.Axis(format='%')),
+            y=alt.Y('cum_percent_money:Q', title='Cumulative Share of Payments', axis=alt.Axis(format='%')),
+            tooltip=[alt.Tooltip('cum_percent_people', format='.1%'), alt.Tooltip('cum_percent_money', format='.1%')]
+        )
+        st.altair_chart(equality + lorenz, use_container_width=True)
+    else:
+        st.warning("No individual clinician data available for the selected filters.")
+
+with tab3:
+    st.subheader("Payment Intensity by State (per Household)")
+    states_geo = alt.topo_feature(data.us_10m.url, 'states')
+
+    map_chart = alt.Chart(states_geo).mark_geoshape().encode(
+        color=alt.Color(
+            'payment_per_household:Q',
+            scale=alt.Scale(scheme='tealblues'),
+            title='Payment per Household ($)'
+        ),
+        tooltip=[
+            alt.Tooltip('state_name:N', title='State'),
+            alt.Tooltip('payment_per_household:Q', format='$,.2f', title='Payment per Household')
+        ]
+    ).transform_lookup(
+        lookup='id',
+        from_=alt.LookupData(df_states, 'fips_code', ['payment_per_household', 'state_name'])
+    ).project(type='albersUsa').properties(height=500)
+
+    st.altair_chart(map_chart, use_container_width=True)
 ```
+:::
 
-### Core Conclusion: The Monopoly of Influence
 
-The concentration analysis provides the final and perhaps most compelling evidence regarding healthcare inequality:
-
-1. **Systemic Financial Oligarchy**: A small number of high-profile physicians—often those involved in major intellectual property or key opinion leadership (KOL) roles—wield disproportionate economic influence over the medical field.
-2. **Dilution of Transparency Intent**: While the Sunshine Act makes all payments transparent, the sheer volume of data can obscure the fact that the "average" physician's financial tie is negligible compared to the massive economic interests concentrated at the top 1%.
-3. **Policy Implication for Equity**: Oversight efforts should not be equally distributed; instead, policy focus and conflict-of-interest auditing should be prioritized for this top 1% of recipients who control over two-thirds of the total funding, as their decisions have the highest potential for systemic impact.
-
-Policy Implications
-The findings of this study move beyond simple transparency, suggesting that the current oversight framework under the Sunshine Act may need to evolve to address structural and geographic inequalities.
-
-1. Targeted Audit Strategies
-The discovery of the "1% Rule"—where 66% of total funding is captured by a minute fraction of recipients—indicates that conflict-of-interest (COI) risks are not uniformly distributed.
-
-Recommendation: Regulators should adopt a risk-based auditing approach. Instead of broad, descriptive oversight, resources should be prioritized for the top 1% of recipients, particularly those involved in high-value Royalty and Licensing agreements, as their financial ties have the highest potential for systemic influence on clinical guidelines.
-
-2. Specialty-Specific Transparency Frameworks
-Our analysis reveals that industry influence operates differently across clinical ecosystems (e.g., high-stakes device bonding in Orthopaedics vs. high-frequency marketing in Internal Medicine).
-
-Recommendation: Disclosure requirements should be tailored to the nature of the specialty. For device-intensive fields, more granular reporting on the relationship between intellectual property payments and clinical adoption of specific medical devices is necessary.
-
-3. Addressing "Resource Deserts" and Geographic Equity
-The Wealth Alignment effect demonstrates that industry capital systematically flows to affluent regions (such as PA and MA), potentially leaving low-income populations in "resource deserts" with less access to medical innovation and industry-sponsored clinical education.
-
-Recommendation: Public health agencies should consider incentives to encourage industry-physician collaborations in underserved or low-income regions. Furthermore, state-level transparency initiatives should be intensified in "high-intensity" zones to monitor the concentration of industry influence in wealthy medical hubs.
-
-4. Enhancing Public Data Utility
-The sheer volume of CMS data can act as a "barrier by complexity."
-
-Recommendation: To fulfill the Sunshine Act’s original promise of accountability, the government should invest in interactive, user-facing analytical tools—similar to the dashboard developed in this project. Providing patients and researchers with the ability to visualize structural patterns (rather than just viewing raw lists of names) is essential for effective public scrutiny.

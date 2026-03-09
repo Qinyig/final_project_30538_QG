@@ -84,5 +84,4 @@ spec_chart.display()
 ### Interpretation
 The "Unknown" category receives the most funding. It totals approximately $800 million. This reflects a reporting structure, as CMS does not assign specific medical specialties to these corporate entities.
 
-Orthopedics ranks first among identified clinical fields. It captures over $500 million. This total is more than double the next highest specialty. 
 Among clinical specialties, Orthopedics ranks first with over $500 million. This total is more than double the next highest specialty. Internal Medicine follows at about $237 million, driven by high-frequency, low-value payments such as meals rather than large device or royalty agreements.
